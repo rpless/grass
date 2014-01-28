@@ -1,5 +1,7 @@
 package rpless.grass.gl.buffers;
 
+import com.jogamp.common.nio.Buffers;
+
 import javax.media.opengl.GL4;
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -16,9 +18,18 @@ public class Mesh {
     }
 
     public void enable(GL4 gl) {
+        int count = attributeCount();
         for (MeshFormat format : meshFormats) {
-            format.enable(gl, 0);
+            format.enable(gl, count * Buffers.SIZEOF_FLOAT);
         }
+    }
+
+    private int attributeCount() {
+        int sum = 0;
+        for (MeshFormat format : meshFormats) {
+            sum = sum + format.getSize();
+        }
+        return sum;
     }
 
     public void disable(GL4 gl) {

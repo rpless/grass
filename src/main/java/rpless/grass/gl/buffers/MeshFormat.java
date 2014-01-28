@@ -22,4 +22,8 @@ public class MeshFormat {
     public void disable(GL4 gl) {
         gl.glDisableVertexAttribArray(index);
     }
+
+    int getSize() {
+        return size;
+    }
 }

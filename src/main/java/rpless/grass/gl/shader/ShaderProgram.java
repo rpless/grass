@@ -1,5 +1,8 @@
 package rpless.grass.gl.shader;
 
+import rpless.grass.math.Matrix4f;
+import rpless.grass.math.Matrix4fUtil;
+
 import javax.media.opengl.GL4;
 import java.util.Map;
 
@@ -27,5 +30,9 @@ public class ShaderProgram {
 
     public int getUniformLocation(String name) {
         return uniforms.get(name);
+    }
+
+    public void uniform(GL4 gl, String location, Matrix4f matrix) {
+        gl.glUniformMatrix4fv(this.getUniformLocation(location), 1, false, matrix.toArray(), 0);
     }
 }

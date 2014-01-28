@@ -1,6 +1,9 @@
 package rpless.grass.gl;
 
 import com.jogamp.common.nio.Buffers;
+import rpless.grass.gl.buffers.Mesh;
+import rpless.grass.gl.buffers.MeshFactory;
+import rpless.grass.gl.buffers.MeshFormat;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
@@ -23,13 +26,16 @@ public class SimulationRenderer implements GLEventListener {
             1.0f,  1.0f,  0.0f, 1.0f,
             -1.0f, 1.0f,  0.0f, 1.0f,
             1.0f,  -1.0f, 0.0f, 1.0f,
+
+            -1.0f, 1.0f,  0.0f, 1.0f,
+            1.0f,  -1.0f, 0.0f, 1.0f,
             -1.0f, -1.0f, 0.0f, 1.0f
     });
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 
     private ShaderProgram shaderProgram;
-    private int vertexBufferHandle = -1;
+    private Mesh mesh;
 
     @Override
     public void init(GLAutoDrawable drawable) {
@@ -37,9 +43,10 @@ public class SimulationRenderer implements GLEventListener {
         ShaderProgramFactory shaderProgramFactory = new ShaderProgramFactory();
         shaderProgram = shaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
-        gl.glEnableVertexAttribArray(shaderProgram.getAttributeLocation("position"));
 
-        vertexBufferHandle = createVertexBuffer(gl, vertices);
+        MeshFactory meshFactory = new MeshFactory();
+        mesh = meshFactory.createMesh(gl, vertices, new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
+        mesh.enable(gl);
     }
 
     @Override
@@ -49,32 +56,17 @@ public class SimulationRenderer implements GLEventListener {
         shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, 800.0f / 600.0f, 0.1f, 100.0f));
         shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -6));
 
-        gl.glBindBuffer(GL4.GL_ARRAY_BUFFER, vertexBufferHandle);
-        gl.glVertexAttribPointer(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, false, 0, 0);
-        gl.glDrawArrays(GL4.GL_TRIANGLE_STRIP, 0, 4);
+        mesh.display(gl);
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {}
 
     @Override
-    public void dispose(GLAutoDrawable drawable) {}
-
-    private int createVertexBuffer(GL4 gl, FloatBuffer buffer) {
-        return createBuffer(gl, buffer, GL4.GL_ARRAY_BUFFER, Buffers.SIZEOF_FLOAT, GL4.GL_STATIC_DRAW);
-    }
-
-    private int createBuffer(GL4 gl, Buffer buffer, int target, int typeSize, int renderingHint) {
-        int handle = this.generateBufferHandle(gl);
-        gl.glBindBuffer(target, handle);
-        gl.glBufferData(target, buffer.capacity() * typeSize, buffer, renderingHint);
-        gl.glBindBuffer(target, handle);
-        return handle;
-    }
-
-    private int generateBufferHandle(GL4 gl) {
-        IntBuffer handleBuffer = Buffers.newDirectIntBuffer(1);
-        gl.glGenBuffers(1, handleBuffer);
-        return handleBuffer.get();
+    public void dispose(GLAutoDrawable drawable) {
+        GL4 gl = drawable.getGL().getGL4();
+        mesh.delete(gl);
+        shaderProgram.disuseProgram(gl);
+        shaderProgram.delete(gl);
     }
 }

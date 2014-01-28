@@ -24,6 +24,10 @@ public class ShaderProgram {
         gl.glUseProgram(0);
     }
 
+    public void delete(GL4 gl) {
+        gl.glDeleteProgram(handle);
+    }
+
     public int getAttributeLocation(String name) {
         return attributes.get(name);
     }

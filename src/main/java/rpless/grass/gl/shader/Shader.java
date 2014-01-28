@@ -1,11 +1,13 @@
 package rpless.grass.gl.shader;
 
+import rpless.grass.gl.NativeObject;
+
 import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Path;
 
-public abstract class Shader {
+public abstract class Shader extends NativeObject {
 
     private static String getText(Path path) {
         StringBuilder builder = new StringBuilder();
@@ -20,15 +22,18 @@ public abstract class Shader {
     }
 
     private String source;
-    private int handle;
 
     public Shader(Path path) {
         this(getText(path));
     }
 
     public Shader(String source) {
+        super(-1);
         this.source = source;
-        this.handle = -1;
+    }
+
+    protected void setHandle(int handle) {
+        super.setHandle(handle);
     }
 
     public String getSource() {
@@ -36,12 +41,4 @@ public abstract class Shader {
     }
 
     public abstract int getType();
-
-    int getHandle() {
-        return handle;
-    }
-
-    void setHandle(int handle) {
-        this.handle = handle;
-    }
 }

@@ -1,23 +1,23 @@
 package rpless.grass.gl.shader;
 
+import rpless.grass.gl.NativeObject;
 import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Matrix4fUtil;
 
 import javax.media.opengl.GL4;
 import java.util.Map;
 
-public class ShaderProgram {
-    private int handle;
+public class ShaderProgram extends NativeObject {
     private Map<String, Integer> attributes, uniforms;
 
     ShaderProgram(int handle, Map<String, Integer> attributes, Map<String, Integer> uniforms) {
-        this.handle = handle;
+        super(handle);
         this.attributes = attributes;
         this.uniforms = uniforms;
     }
 
     public void useProgram(GL4 gl) {
-        gl.glUseProgram(handle);
+        gl.glUseProgram(getHandle());
     }
 
     public void disuseProgram(GL4 gl) {
@@ -25,7 +25,7 @@ public class ShaderProgram {
     }
 
     public void delete(GL4 gl) {
-        gl.glDeleteProgram(handle);
+        gl.glDeleteProgram(getHandle());
     }
 
     public int getAttributeLocation(String name) {

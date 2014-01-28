@@ -1,4 +1,4 @@
-package rpless.grass.gl;
+package rpless.grass;
 
 import com.jogamp.common.nio.Buffers;
 import rpless.grass.gl.buffers.Mesh;
@@ -10,6 +10,7 @@ import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
 import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Matrix4fUtil;
+import rpless.grass.window.SimulationWindow;
 
 import javax.media.opengl.GL4;
 import javax.media.opengl.GLAutoDrawable;
@@ -53,9 +54,8 @@ public class SimulationRenderer implements GLEventListener {
     public void display(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, 800.0f / 600.0f, 0.1f, 100.0f));
+        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
         shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -6));
-
         mesh.display(gl);
     }
 

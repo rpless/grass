@@ -12,8 +12,8 @@ import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 
 public class SimulationWindow {
-    public static final int WIDTH = 800;
-    public static final int HEIGHT = 600;
+    public static final Float WIDTH = 800.0f;
+    public static final Float HEIGHT = 600.0f;
     private class SimulationWindowListener extends WindowAdapter {
         @Override
         public void windowDestroyNotify(WindowEvent windowEvent) {
@@ -30,7 +30,7 @@ public class SimulationWindow {
         GLCapabilities capabilities = new GLCapabilities(profile);
         window = GLWindow.create(capabilities);
         window.setTitle("Grass");
-        window.setSize(WIDTH, HEIGHT);
+        window.setSize(WIDTH.intValue(), HEIGHT.intValue());
         window.setVisible(true);
         window.addWindowListener(new SimulationWindowListener());
     }

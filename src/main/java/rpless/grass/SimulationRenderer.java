@@ -40,8 +40,7 @@ public class SimulationRenderer implements GLEventListener {
         shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
 
-        MeshFactory meshFactory = new MeshFactory();
-        mesh = meshFactory.createMesh(gl, vertices, new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
+        mesh = MeshFactory.createMesh(gl, vertices, new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
         mesh.enable(gl);
     }
 

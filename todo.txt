@@ -1,1 +1,8 @@
+Next Steps:
+- Index Buffers
+- Camera
+- Pass through geometry shader
+
+At some point:
 - Refactor Shader Compilation
+- loading meshes from a file

@@ -60,7 +60,10 @@ public class SimulationRenderer implements GLEventListener {
     }
 
     @Override
-    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {}
+    public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
+        GL4 gl = drawable.getGL().getGL4();
+        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
+    }
 
     @Override
     public void dispose(GLAutoDrawable drawable) {

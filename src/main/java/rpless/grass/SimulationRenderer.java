@@ -17,6 +17,10 @@ import java.nio.FloatBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
+/**
+ * The {@code SimulationRenderer} is a {@link javax.media.opengl.GLEventListener} that implements the main
+ * rendering logic for the simulation.
+ */
 public class SimulationRenderer implements GLEventListener {
 
     static final FloatBuffer vertices = FloatBuffer.wrap(new float[] {

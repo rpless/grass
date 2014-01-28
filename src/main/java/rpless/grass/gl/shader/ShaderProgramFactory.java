@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ShaderProgramFactory {
 
-    public ShaderProgram makeShader(GL4 gl, Shader... shaders) {
+    public static ShaderProgram makeShader(GL4 gl, Shader... shaders) {
         List<Shader> shaderList = Arrays.asList(shaders);
         int handle = gl.glCreateProgram();
         for (Shader shader : shaderList) {
@@ -31,7 +31,7 @@ public class ShaderProgramFactory {
         return new ShaderProgram(handle, getAttributeMap(gl, handle), getUniforms(gl, handle));
     }
 
-    private Map<String, Integer> getAttributeMap(GL4 gl, int handle) {
+    private static Map<String, Integer> getAttributeMap(GL4 gl, int handle) {
         Map<String, Integer> attributes = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
         gl.glGetProgramiv(handle, GL4.GL_ACTIVE_ATTRIBUTES, countBuffer);
@@ -48,7 +48,7 @@ public class ShaderProgramFactory {
         return attributes;
     }
 
-    private Map<String, Integer> getUniforms(GL4 gl, int handle) {
+    private static Map<String, Integer> getUniforms(GL4 gl, int handle) {
         Map<String, Integer> uniforms = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
         gl.glGetProgramiv(handle, GL4.GL_ACTIVE_UNIFORMS, countBuffer);
@@ -65,7 +65,7 @@ public class ShaderProgramFactory {
         return uniforms;
     }
 
-    private void printLinkerError(GL4 gl, int handle) {
+    private static void printLinkerError(GL4 gl, int handle) {
         IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
         gl.glGetProgramiv(handle, GL4.GL_INFO_LOG_LENGTH, logLengthBuffer);
         int length = logLengthBuffer.get();
@@ -77,13 +77,13 @@ public class ShaderProgramFactory {
         System.err.println(new String(bytes));
     }
 
-    private boolean isLinked(GL4 gl, int handle) {
+    private static boolean isLinked(GL4 gl, int handle) {
         IntBuffer status = Buffers.newDirectIntBuffer(1);
         gl.glGetProgramiv(handle, GL4.GL_INFO_LOG_LENGTH, status);
         return status.get() == GL4.GL_TRUE;
     }
 
-    private void compileShader(GL4 gl, Shader shader) {
+    private static void compileShader(GL4 gl, Shader shader) {
         int handle = gl.glCreateShader(shader.getType());
         gl.glShaderSource(handle, 1, new String[] {shader.getSource()}, null, 0);
         gl.glCompileShader(handle);
@@ -93,13 +93,13 @@ public class ShaderProgramFactory {
         shader.setHandle(handle);
     }
 
-    private boolean isCompiled(GL4 gl, int handle) {
+    private static boolean isCompiled(GL4 gl, int handle) {
         IntBuffer status = Buffers.newDirectIntBuffer(1);
         gl.glGetShaderiv(handle, GL4.GL_COMPILE_STATUS, status);
         return status.get() == GL4.GL_TRUE;
     }
 
-    private void printCompileErrorLog(GL4 gl, int handle) {
+    private static void printCompileErrorLog(GL4 gl, int handle) {
         IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
         gl.glGetShaderiv(handle, GL4.GL_INFO_LOG_LENGTH, logLengthBuffer);
         int length = logLengthBuffer.get();

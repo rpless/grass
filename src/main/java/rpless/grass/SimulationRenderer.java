@@ -1,6 +1,5 @@
 package rpless.grass;
 
-import com.jogamp.common.nio.Buffers;
 import rpless.grass.gl.buffers.Mesh;
 import rpless.grass.gl.buffers.MeshFactory;
 import rpless.grass.gl.buffers.MeshFormat;
@@ -8,16 +7,13 @@ import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
-import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Matrix4fUtil;
 import rpless.grass.window.SimulationWindow;
 
 import javax.media.opengl.GL4;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import java.nio.Buffer;
 import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 
@@ -41,8 +37,7 @@ public class SimulationRenderer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
-        ShaderProgramFactory shaderProgramFactory = new ShaderProgramFactory();
-        shaderProgram = shaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
+        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
 
         MeshFactory meshFactory = new MeshFactory();

@@ -1,8 +1,13 @@
 package rpless.grass.gl.shader;
 
 import javax.media.opengl.GL4;
+import java.nio.file.Path;
 
 public class FragmentShader extends Shader {
+
+    public FragmentShader(Path path) {
+        super(path);
+    }
 
     public FragmentShader(String source) {
         super(source);

@@ -9,6 +9,7 @@ import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
 import rpless.grass.math.Matrix4fUtil;
+import rpless.grass.math.Vector3f;
 import rpless.grass.window.SimulationWindow;
 
 import javax.media.opengl.GL4;
@@ -52,7 +53,7 @@ public class SimulationRenderer implements GLEventListener {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
         shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
-        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -6));
+        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -5).multiply(Matrix4fUtil.rotateY(45)));
         mesh.display(gl);
     }
 

@@ -6,16 +6,16 @@ public class Vector3f {
         return new Vector3f(x, y, z);
     }
 
+    public static Vector3f zero() {
+        return Vector3f.of(0, 0, 0);
+    }
+
     // An epsilon for comparing floats.
     private static float EPSILON = 0.000_001f;
 
     private float x, y, z;
 
-    public Vector3f() {
-        this(0, 0, 0);
-    }
-
-    public Vector3f(float x, float y, float z) {
+    Vector3f(float x, float y, float z) {
         this.x = x;
         this.y = y;
         this.z = z;

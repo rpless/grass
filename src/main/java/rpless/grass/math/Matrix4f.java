@@ -38,7 +38,7 @@ public class Matrix4f {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
                 for (int k = 0; k < SIZE; k++) {
-                    result.set(i, j, result.get(i, j) + (this.get(i, k) * mat.get(k, j)));
+                    result.set(i, j, result.get(i, j) + (mat.get(i, k) * this.get(k, j)));
                 }
             }
         }
@@ -60,13 +60,13 @@ public class Matrix4f {
     }
 
     public String toString() {
-        StringBuilder builder = new StringBuilder();
+        StringBuilder builder = new StringBuilder("[");
         for (int i = 0; i < SIZE; i++) {
             builder.append("[");
             for (int j = 0; j < SIZE; j++) {
-                builder.append(this.get(j, i)).append(" ");
+                builder.append(this.get(j, i)).append((j == (SIZE - 1)) ? "" : ",");
             }
-            builder.append("]\n");
+            builder.append((i == (SIZE - 1)) ? "]]" : "],").append("\n");
         }
         return builder.toString();
     }

@@ -6,12 +6,13 @@ import javax.media.opengl.GL4;
 import java.util.Collection;
 
 public class Mesh {
-    private NativeBuffer vertexBuffer;
+    private NativeBuffer vertexBuffer, indexBuffer;
     private int count;
     private Collection<MeshFormat> meshFormats;
 
-    Mesh(NativeBuffer vertexBuffer, int count, Collection<MeshFormat> formats) {
+    Mesh(NativeBuffer vertexBuffer, NativeBuffer indexBuffer, int count, Collection<MeshFormat> formats) {
         this.vertexBuffer = vertexBuffer;
+        this.indexBuffer = indexBuffer;
         this.count = count;
         this.meshFormats = formats;
     }
@@ -40,7 +41,8 @@ public class Mesh {
 
     public void display(GL4 gl) {
         vertexBuffer.enable(gl);
-        gl.glDrawArrays(GL4.GL_TRIANGLES, 0, count);
+        indexBuffer.enable(gl);
+        gl.glDrawElements(GL4.GL_TRIANGLES, count, GL4.GL_UNSIGNED_SHORT, 0);
     }
 
     public void delete(GL4 gl) {

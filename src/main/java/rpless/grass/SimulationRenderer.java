@@ -24,15 +24,6 @@ import java.nio.file.Paths;
  */
 public class SimulationRenderer implements GLEventListener {
 
-    static final FloatBuffer vertices = FloatBuffer.wrap(new float[] {
-            1.0f,  1.0f,  0.0f, 1.0f,  1.0f,  1.0f,  1.0f,  1.0f,
-            -1.0f, 1.0f,  0.0f, 1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-            1.0f,  -1.0f, 0.0f, 1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-
-            -1.0f, 1.0f,  0.0f, 1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-            1.0f,  -1.0f, 0.0f, 1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-            -1.0f, -1.0f, 0.0f, 1.0f,  1.0f,  0.0f,  1.0f,  1.0f,
-    });
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 
@@ -42,11 +33,17 @@ public class SimulationRenderer implements GLEventListener {
     @Override
     public void init(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
+        gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+        gl.glClearDepth(1.0f);
+        gl.glEnable(GL4.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL4.GL_LEQUAL);
+
         shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
 
-        mesh = MeshFactory.createMesh(gl, vertices, new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false),
-                                                    new MeshFormat(shaderProgram.getAttributeLocation("color"), 4, GL4.GL_FLOAT, 4 * Buffers.SIZEOF_FLOAT, false));
+        mesh = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
+                new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false),
+                new MeshFormat(shaderProgram.getAttributeLocation("color"), 4, GL4.GL_FLOAT, 4 * Buffers.SIZEOF_FLOAT, false));
         mesh.enable(gl);
     }
 

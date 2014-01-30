@@ -6,9 +6,9 @@ import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
 import com.jogamp.opengl.util.AnimatorBase;
 import com.jogamp.opengl.util.FPSAnimator;
+import rpless.grass.Simulation;
 
 import javax.media.opengl.GLCapabilities;
-import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 
 /**
@@ -57,8 +57,9 @@ public class SimulationWindow {
      * Start the {@link com.jogamp.opengl.util.AnimatorBase} with the given {@link javax.media.opengl.GLEventListener}.
      * @param eventListener The {@link javax.media.opengl.GLEventListener} to use
      */
-    public void start(GLEventListener eventListener) {
+    public void start(Simulation eventListener) {
         window.addGLEventListener(eventListener);
+        window.addKeyListener(eventListener);
         animatorBase = new FPSAnimator(window, 60, true);
         animatorBase.start();
     }

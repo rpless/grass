@@ -1,5 +1,4 @@
 Next Steps:
-- Index Buffers
 - Camera
 - Pass through geometry shader
 

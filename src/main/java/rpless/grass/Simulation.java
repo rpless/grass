@@ -1,28 +1,21 @@
 package rpless.grass;
 
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import rpless.grass.gl.buffers.Mesh;
-import rpless.grass.gl.buffers.MeshFactory;
-import rpless.grass.gl.buffers.MeshFormat;
+import rpless.grass.mesh.Mesh;
+import rpless.grass.mesh.MeshFactory;
+import rpless.grass.mesh.MeshFormat;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
-import rpless.grass.input.KeyInputAction;
-import rpless.grass.input.Recognizer;
-import rpless.grass.input.recognizers.KeyClickRecognizer;
-import rpless.grass.input.recognizers.KeyReleaseRecognizer;
 import rpless.grass.math.Matrix4fUtil;
-import rpless.grass.math.Vector3f;
 import rpless.grass.window.SimulationWindow;
 
 import javax.media.opengl.GL4;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import java.nio.FloatBuffer;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 

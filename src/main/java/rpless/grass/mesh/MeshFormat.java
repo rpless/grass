@@ -1,4 +1,4 @@
-package rpless.grass.gl.buffers;
+package rpless.grass.mesh;
 
 import javax.media.opengl.GL4;
 

@@ -1,6 +1,6 @@
-package rpless.grass.gl.buffers;
+package rpless.grass.mesh;
 
-import com.jogamp.common.nio.Buffers;
+import rpless.grass.gl.buffers.NativeBuffer;
 
 import javax.media.opengl.GL4;
 import java.nio.FloatBuffer;

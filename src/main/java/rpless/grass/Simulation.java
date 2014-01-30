@@ -3,6 +3,7 @@ package rpless.grass;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyAdapter;
 import com.jogamp.newt.event.KeyEvent;
+import com.jogamp.newt.event.KeyListener;
 import rpless.grass.gl.buffers.Mesh;
 import rpless.grass.gl.buffers.MeshFactory;
 import rpless.grass.gl.buffers.MeshFormat;
@@ -12,6 +13,7 @@ import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
 import rpless.grass.input.KeyInputAction;
 import rpless.grass.input.Recognizer;
+import rpless.grass.input.recognizers.KeyClickRecognizer;
 import rpless.grass.input.recognizers.KeyReleaseRecognizer;
 import rpless.grass.math.Matrix4fUtil;
 import rpless.grass.math.Vector3f;
@@ -28,16 +30,13 @@ import java.nio.file.Paths;
  * The {@code Simulation} is a {@link javax.media.opengl.GLEventListener} that implements the main
  * rendering logic for the simulation.
  */
-public class Simulation extends KeyAdapter implements GLEventListener {
+public class Simulation implements GLEventListener, KeyListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 
     private ShaderProgram shaderProgram;
     private Mesh mesh;
-
-    // Input
-    Recognizer<KeyEvent> recognizer = new KeyReleaseRecognizer();
 
     @Override
     public void init(GLAutoDrawable drawable) {
@@ -80,9 +79,8 @@ public class Simulation extends KeyAdapter implements GLEventListener {
     }
 
     @Override
-    public void keyReleased(KeyEvent event) {
-        if (recognizer.isRecognized(event)) {
-            System.out.println("Char: " + event.getKeyChar());
-        }
-    }
+    public void keyPressed(KeyEvent event) {}
+
+    @Override
+    public void keyReleased(KeyEvent event) {}
 }

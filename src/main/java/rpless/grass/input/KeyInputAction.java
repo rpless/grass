@@ -7,7 +7,6 @@ import java.util.Collection;
 
 public class KeyInputAction {
     private Collection<Recognizer<KeyEvent>> recognizers;
-    private boolean detected = false;
 
     public KeyInputAction(Recognizer<KeyEvent>... recognizers) {
         this.recognizers = Arrays.asList(recognizers);
@@ -17,17 +16,12 @@ public class KeyInputAction {
         this.recognizers = recognizers;
     }
 
-    public boolean isDetected() {
-        return detected;
-    }
-
-    public void applyRecognizers(KeyEvent keyEvent) {
+    public boolean isDetected(KeyEvent keyEvent) {
         for (Recognizer<KeyEvent> recognizer : recognizers) {
             if (!recognizer.isRecognized(keyEvent)) {
-                detected = false;
-                return;
+                return false;
             }
         }
-        detected = true;
+        return true;
     }
 }

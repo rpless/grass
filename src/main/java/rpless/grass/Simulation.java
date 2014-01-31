@@ -3,6 +3,11 @@ package rpless.grass;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
+import rpless.grass.input.KeyInputAction;
+import rpless.grass.input.recognizers.KeyCharRecognizer;
+import rpless.grass.input.recognizers.KeyClickRecognizer;
+import rpless.grass.input.recognizers.KeyPressRecognizer;
+import rpless.grass.input.recognizers.KeyReleaseRecognizer;
 import rpless.grass.mesh.Mesh;
 import rpless.grass.mesh.MeshFactory;
 import rpless.grass.mesh.MeshFormat;
@@ -31,6 +36,12 @@ public class Simulation implements GLEventListener, KeyListener {
     private Camera camera = new Camera();
     private ShaderProgram shaderProgram;
     private Mesh mesh;
+
+    // Input
+    KeyInputAction moveLeft = new KeyInputAction(new KeyCharRecognizer('a'), new KeyPressRecognizer());
+    KeyInputAction moveRight = new KeyInputAction(new KeyCharRecognizer('d'), new KeyPressRecognizer());
+    KeyInputAction moveForward = new KeyInputAction(new KeyCharRecognizer('w'), new KeyPressRecognizer());
+    KeyInputAction moveBack = new KeyInputAction(new KeyCharRecognizer('s'), new KeyPressRecognizer());
 
     @Override
     public void init(GLAutoDrawable drawable) {
@@ -74,7 +85,12 @@ public class Simulation implements GLEventListener, KeyListener {
     }
 
     @Override
-    public void keyPressed(KeyEvent event) {}
+    public void keyPressed(KeyEvent event) {
+        if (moveLeft.isDetected(event)) camera.strafeRight(-0.05f);
+        if (moveRight.isDetected(event)) camera.strafeRight(0.05f);
+        if (moveForward.isDetected(event)) camera.moveForward(0.075f);
+        if (moveBack.isDetected(event)) camera.moveForward(-0.05f);
+    }
 
     @Override
     public void keyReleased(KeyEvent event) {}

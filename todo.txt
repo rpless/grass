@@ -1,5 +1,4 @@
 Next Steps:
-- Camera
 - Pass through geometry shader
 
 At some point:

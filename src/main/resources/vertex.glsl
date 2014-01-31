@@ -10,8 +10,6 @@ uniform mat4 perspectiveMatrix;
 smooth out vec4 fragmentColor;
 
 void main() {
-  vec4 temp = modelMatrix * position;
-  temp = cameraMatrix * temp;
-  gl_Position = perspectiveMatrix * temp;
+  gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * position;
   fragmentColor = color;
 }

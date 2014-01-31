@@ -88,7 +88,7 @@ public class ShaderProgramFactory {
         gl.glShaderSource(handle, 1, new String[] {shader.getSource()}, null, 0);
         gl.glCompileShader(handle);
         if (!isCompiled(gl, handle)) {
-            printCompileErrorLog(gl, handle);
+            printCompileErrorLog(gl, handle, shader);
         }
         shader.setHandle(handle);
     }
@@ -99,7 +99,7 @@ public class ShaderProgramFactory {
         return status.get() == GL4.GL_TRUE;
     }
 
-    private static void printCompileErrorLog(GL4 gl, int handle) {
+    private static void printCompileErrorLog(GL4 gl, int handle, Shader shader) {
         IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
         gl.glGetShaderiv(handle, GL4.GL_INFO_LOG_LENGTH, logLengthBuffer);
         int length = logLengthBuffer.get();
@@ -108,6 +108,6 @@ public class ShaderProgramFactory {
         gl.glGetShaderInfoLog(handle, length, null, data);
         byte[] bytes = new byte[length];
         data.get(bytes);
-        System.err.println(new String(bytes));
+        System.err.println(shader + ": " + new String(bytes));
     }
 }

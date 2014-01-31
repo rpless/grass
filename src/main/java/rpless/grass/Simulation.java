@@ -3,19 +3,21 @@ package rpless.grass;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import rpless.grass.input.KeyInputAction;
-import rpless.grass.input.recognizers.KeyCharRecognizer;
-import rpless.grass.input.recognizers.KeyClickRecognizer;
-import rpless.grass.input.recognizers.KeyPressRecognizer;
-import rpless.grass.input.recognizers.KeyReleaseRecognizer;
-import rpless.grass.mesh.Mesh;
-import rpless.grass.mesh.MeshFactory;
-import rpless.grass.mesh.MeshFormat;
+import com.jogamp.newt.event.MouseAdapter;
+import com.jogamp.newt.event.MouseEvent;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
+import rpless.grass.input.KeyInputAction;
+import rpless.grass.input.MouseMotionInputAction;
+import rpless.grass.input.recognizers.KeyCharRecognizer;
+import rpless.grass.input.recognizers.KeyPressRecognizer;
+import rpless.grass.input.recognizers.MouseMotionRecognizer;
 import rpless.grass.math.Matrix4fUtil;
+import rpless.grass.mesh.Mesh;
+import rpless.grass.mesh.MeshFactory;
+import rpless.grass.mesh.MeshFormat;
 import rpless.grass.window.SimulationWindow;
 
 import javax.media.opengl.GL4;
@@ -28,7 +30,7 @@ import java.nio.file.Paths;
  * The {@code Simulation} is a {@link javax.media.opengl.GLEventListener} that implements the main
  * rendering logic for the simulation.
  */
-public class Simulation implements GLEventListener, KeyListener {
+public class Simulation extends MouseAdapter implements GLEventListener, KeyListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
@@ -42,6 +44,8 @@ public class Simulation implements GLEventListener, KeyListener {
     KeyInputAction moveRight = new KeyInputAction(new KeyCharRecognizer('d'), new KeyPressRecognizer());
     KeyInputAction moveForward = new KeyInputAction(new KeyCharRecognizer('w'), new KeyPressRecognizer());
     KeyInputAction moveBack = new KeyInputAction(new KeyCharRecognizer('s'), new KeyPressRecognizer());
+
+    MouseMotionInputAction motion = new MouseMotionInputAction(new MouseMotionRecognizer());
 
     @Override
     public void init(GLAutoDrawable drawable) {

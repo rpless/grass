@@ -60,6 +60,7 @@ public class SimulationWindow {
     public void start(Simulation eventListener) {
         window.addGLEventListener(eventListener);
         window.addKeyListener(eventListener);
+        window.addMouseListener(eventListener);
         animatorBase = new FPSAnimator(window, 60, true);
         animatorBase.start();
     }

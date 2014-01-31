@@ -33,6 +33,12 @@ public class Matrix4f {
         values[column * SIZE + row] = value;
     }
 
+    public void set(int column, Vector3f vector) {
+        set(column, 0, vector.x());
+        set(column, 1, vector.y());
+        set(column, 2, vector.z());
+    }
+
     public Matrix4f multiply(Matrix4f mat) {
         Matrix4f result = new Matrix4f();
         for (int i = 0; i < SIZE; i++) {

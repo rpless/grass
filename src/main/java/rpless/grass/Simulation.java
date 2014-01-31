@@ -28,6 +28,7 @@ public class Simulation implements GLEventListener, KeyListener {
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 
+    private Camera camera = new Camera();
     private ShaderProgram shaderProgram;
     private Mesh mesh;
 
@@ -41,6 +42,7 @@ public class Simulation implements GLEventListener, KeyListener {
 
         shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
+        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 
         mesh = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
                 new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false),
@@ -52,7 +54,7 @@ public class Simulation implements GLEventListener, KeyListener {
     public void display(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
+        shaderProgram.uniform(gl, "cameraMatrix", camera.lookAt());
         shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -5).multiply(Matrix4fUtil.rotateY(45)));
         mesh.display(gl);
     }

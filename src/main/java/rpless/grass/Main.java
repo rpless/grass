@@ -7,7 +7,8 @@ public class Main {
         new Thread() {
             public void run() {
                 SimulationWindow window = new SimulationWindow();
-                window.start(new Simulation());
+                new Simulation(window);
+                window.start();
             }
         }.start();
     }

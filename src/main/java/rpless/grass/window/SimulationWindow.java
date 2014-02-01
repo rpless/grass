@@ -1,6 +1,7 @@
 package rpless.grass.window;
 
 import com.jogamp.newt.event.KeyListener;
+import com.jogamp.newt.event.MouseListener;
 import com.jogamp.newt.event.WindowAdapter;
 import com.jogamp.newt.event.WindowEvent;
 import com.jogamp.newt.opengl.GLWindow;
@@ -9,6 +10,7 @@ import com.jogamp.opengl.util.FPSAnimator;
 import rpless.grass.Simulation;
 
 import javax.media.opengl.GLCapabilities;
+import javax.media.opengl.GLEventListener;
 import javax.media.opengl.GLProfile;
 
 /**
@@ -45,22 +47,26 @@ public class SimulationWindow {
         window.addWindowListener(new SimulationWindowListener());
     }
 
-    /**
-     *
-     * @param keyListener
-     */
     public void addKeyListener(KeyListener keyListener) {
         window.addKeyListener(keyListener);
     }
 
+    public void warpPointer(int i, int i2) {
+        window.warpPointer(i, i2);
+    }
+
+    public void addGLEventListener(GLEventListener eventListener) {
+        window.addGLEventListener(eventListener);
+    }
+
+    public void addMouseListener(MouseListener mouseListener) {
+        window.addMouseListener(mouseListener);
+    }
+
     /**
      * Start the {@link com.jogamp.opengl.util.AnimatorBase} with the given {@link javax.media.opengl.GLEventListener}.
-     * @param eventListener The {@link javax.media.opengl.GLEventListener} to use
      */
-    public void start(Simulation eventListener) {
-        window.addGLEventListener(eventListener);
-        window.addKeyListener(eventListener);
-        window.addMouseListener(eventListener);
+    public void start() {
         animatorBase = new FPSAnimator(window, 60, true);
         animatorBase.start();
     }

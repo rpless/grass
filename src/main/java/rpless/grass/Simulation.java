@@ -4,14 +4,13 @@ import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseAdapter;
-import com.jogamp.newt.event.MouseEvent;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
 import rpless.grass.input.KeyInputAction;
 import rpless.grass.input.MouseMotionInputAction;
-import rpless.grass.input.recognizers.KeyCharRecognizer;
+import rpless.grass.input.recognizers.KeyCodeRecognizer;
 import rpless.grass.input.recognizers.KeyPressRecognizer;
 import rpless.grass.input.recognizers.MouseMotionRecognizer;
 import rpless.grass.math.Matrix4fUtil;
@@ -35,17 +34,26 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 
+    private SimulationWindow window;
     private Camera camera = new Camera();
     private ShaderProgram shaderProgram;
     private Mesh mesh;
 
     // Input
-    KeyInputAction moveLeft = new KeyInputAction(new KeyCharRecognizer('a'), new KeyPressRecognizer());
-    KeyInputAction moveRight = new KeyInputAction(new KeyCharRecognizer('d'), new KeyPressRecognizer());
-    KeyInputAction moveForward = new KeyInputAction(new KeyCharRecognizer('w'), new KeyPressRecognizer());
-    KeyInputAction moveBack = new KeyInputAction(new KeyCharRecognizer('s'), new KeyPressRecognizer());
+    KeyInputAction moveLeft = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_A), new KeyPressRecognizer());
+    KeyInputAction moveRight = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_D), new KeyPressRecognizer());
+    KeyInputAction moveForward = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_W), new KeyPressRecognizer());
+    KeyInputAction moveBack = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_S), new KeyPressRecognizer());
+    KeyInputAction closeSimulation = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_ESCAPE), new KeyPressRecognizer());
 
     MouseMotionInputAction motion = new MouseMotionInputAction(new MouseMotionRecognizer());
+
+    public Simulation(SimulationWindow window) {
+        this.window = window;
+        window.addGLEventListener(this);
+        window.addKeyListener(this);
+        window.addMouseListener(this);
+    }
 
     @Override
     public void init(GLAutoDrawable drawable) {
@@ -94,6 +102,7 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
         if (moveRight.isDetected(event)) camera.strafeRight(0.05f);
         if (moveForward.isDetected(event)) camera.moveForward(0.075f);
         if (moveBack.isDetected(event)) camera.moveForward(-0.05f);
+        if (closeSimulation.isDetected(event)) window.stop();
     }
 
     @Override

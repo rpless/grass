@@ -4,6 +4,7 @@ import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
 import com.jogamp.newt.event.MouseAdapter;
+import com.jogamp.newt.event.MouseEvent;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
@@ -46,6 +47,7 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
     KeyInputAction moveBack = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_S), new KeyPressRecognizer());
     KeyInputAction closeSimulation = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_ESCAPE), new KeyPressRecognizer());
 
+    private boolean recentering = false;
     MouseMotionInputAction motion = new MouseMotionInputAction(new MouseMotionRecognizer());
 
     public Simulation(SimulationWindow window) {
@@ -53,6 +55,7 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
         window.addGLEventListener(this);
         window.addKeyListener(this);
         window.addMouseListener(this);
+        window.setPointerVisible(false);
     }
 
     @Override
@@ -85,7 +88,7 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL4 gl = drawable.getGL().getGL4();
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
+        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(60, ((float) width) / ((float) height), 0.1f, 100.0f));
     }
 
     @Override
@@ -98,13 +101,31 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
 
     @Override
     public void keyPressed(KeyEvent event) {
-        if (moveLeft.isDetected(event)) camera.strafeRight(-0.05f);
-        if (moveRight.isDetected(event)) camera.strafeRight(0.05f);
-        if (moveForward.isDetected(event)) camera.moveForward(0.075f);
-        if (moveBack.isDetected(event)) camera.moveForward(-0.05f);
+        if (moveLeft.isDetected(event)) camera.strafeRight(-0.15f);
+        if (moveRight.isDetected(event)) camera.strafeRight(0.15f);
+        if (moveForward.isDetected(event)) camera.moveForward(0.175f);
+        if (moveBack.isDetected(event)) camera.moveForward(-0.15f);
         if (closeSimulation.isDetected(event)) window.stop();
     }
 
     @Override
     public void keyReleased(KeyEvent event) {}
+
+    @Override
+    public void mouseMoved(MouseEvent mouseEvent) {
+        int dx = mouseEvent.getX() - 400;
+        int dy = mouseEvent.getY() - 300;
+        if (recentering && dx == 0 && dy == 0) {
+            recentering = false;
+        } else if (motion.isDetected(mouseEvent)) {
+            camera.rotateX(dy > 0 ? -1 : 1);
+            camera.rotateY(dx > 0 ? -1 : 1);
+            recenter();
+        }
+    }
+
+    private void recenter() {
+        recentering = true;
+        window.warpPointer(400, 300);
+    }
 }

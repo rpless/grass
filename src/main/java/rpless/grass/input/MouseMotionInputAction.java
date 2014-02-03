@@ -25,6 +25,7 @@ public class MouseMotionInputAction {
         }
         deltaX = event.getX() - getX();
         deltaY = event.getY() - getY();
+        System.out.println("(" + event.getX() + "," + event.getY() + ") Delta: (" + deltaX + "," + deltaY + ")");
         x = event.getX();
         y = event.getY();
         return true;

@@ -51,8 +51,12 @@ public class SimulationWindow {
         window.addKeyListener(keyListener);
     }
 
-    public void warpPointer(int i, int i2) {
-        window.warpPointer(i, i2);
+    public void warpPointer(int x, int y) {
+        window.warpPointer(x, y);
+    }
+
+    public void setPointerVisible(boolean visible) {
+        window.setPointerVisible(visible);
     }
 
     public void addGLEventListener(GLEventListener eventListener) {

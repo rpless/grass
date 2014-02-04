@@ -3,17 +3,13 @@ package rpless.grass;
 import com.jogamp.common.nio.Buffers;
 import com.jogamp.newt.event.KeyEvent;
 import com.jogamp.newt.event.KeyListener;
-import com.jogamp.newt.event.MouseAdapter;
-import com.jogamp.newt.event.MouseEvent;
 import rpless.grass.gl.shader.FragmentShader;
 import rpless.grass.gl.shader.ShaderProgram;
 import rpless.grass.gl.shader.ShaderProgramFactory;
 import rpless.grass.gl.shader.VertexShader;
 import rpless.grass.input.KeyInputAction;
-import rpless.grass.input.MouseMotionInputAction;
 import rpless.grass.input.recognizers.KeyCodeRecognizer;
 import rpless.grass.input.recognizers.KeyPressRecognizer;
-import rpless.grass.input.recognizers.MouseMotionRecognizer;
 import rpless.grass.math.Matrix4fUtil;
 import rpless.grass.mesh.Mesh;
 import rpless.grass.mesh.MeshFactory;
@@ -30,7 +26,7 @@ import java.nio.file.Paths;
  * The {@code Simulation} is a {@link javax.media.opengl.GLEventListener} that implements the main
  * rendering logic for the simulation.
  */
-public class Simulation extends MouseAdapter implements GLEventListener, KeyListener {
+public class Simulation implements GLEventListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
@@ -40,21 +36,13 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
     private ShaderProgram shaderProgram;
     private Mesh mesh;
 
-    // Input
-    KeyInputAction moveLeft = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_A), new KeyPressRecognizer());
-    KeyInputAction moveRight = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_D), new KeyPressRecognizer());
-    KeyInputAction moveForward = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_W), new KeyPressRecognizer());
-    KeyInputAction moveBack = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_S), new KeyPressRecognizer());
-    KeyInputAction closeSimulation = new KeyInputAction(new KeyCodeRecognizer(KeyEvent.VK_ESCAPE), new KeyPressRecognizer());
-
-    private boolean recentering = false;
-    MouseMotionInputAction motion = new MouseMotionInputAction(new MouseMotionRecognizer());
-
     public Simulation(SimulationWindow window) {
         this.window = window;
+        MouseHandler mouseHandler = new MouseHandler(window, camera);
+        KeyHandler keyHandler = new KeyHandler(window, camera);
         window.addGLEventListener(this);
-        window.addKeyListener(this);
-        window.addMouseListener(this);
+        window.addKeyListener(keyHandler);
+        window.addMouseListener(mouseHandler);
         window.setPointerVisible(false);
     }
 
@@ -97,35 +85,5 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
         mesh.delete(gl);
         shaderProgram.disuseProgram(gl);
         shaderProgram.delete(gl);
-    }
-
-    @Override
-    public void keyPressed(KeyEvent event) {
-        if (moveLeft.isDetected(event)) camera.strafeRight(0.15f);
-        if (moveRight.isDetected(event)) camera.strafeRight(-0.15f);
-        if (moveForward.isDetected(event)) camera.moveForward(0.175f);
-        if (moveBack.isDetected(event)) camera.moveForward(-0.15f);
-        if (closeSimulation.isDetected(event)) window.stop();
-    }
-
-    @Override
-    public void keyReleased(KeyEvent event) {}
-
-    @Override
-    public void mouseMoved(MouseEvent mouseEvent) {
-        int dx = mouseEvent.getX() - (int) (SimulationWindow.WIDTH / 2);
-        int dy = mouseEvent.getY() - (int) (SimulationWindow.HEIGHT / 2);
-        if (recentering && dx == 0 && dy == 0) {
-            recentering = false;
-        } else if (motion.isDetected(mouseEvent)) {
-            if (dy != 0) camera.pitch(dy > 0 ? -0.01f : 0.01f);
-            if (dx != 0) camera.yaw(dx > 0 ? 0.01f : -0.01f);
-            recenter();
-        }
-    }
-
-    private void recenter() {
-        recentering = true;
-        window.warpPointer(400, 300);
     }
 }

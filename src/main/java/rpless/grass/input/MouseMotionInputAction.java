@@ -7,7 +7,7 @@ import java.util.Collection;
 
 public class MouseMotionInputAction {
     private Collection<Recognizer<MouseEvent>> recognizers;
-    private int x, y, deltaX, deltaY;
+    private int x, y;
 
     public MouseMotionInputAction(Recognizer<MouseEvent>... recognizers) {
         this.recognizers = Arrays.asList(recognizers);
@@ -23,9 +23,6 @@ public class MouseMotionInputAction {
                 return false;
             }
         }
-        deltaX = event.getX() - getX();
-        deltaY = event.getY() - getY();
-        System.out.println("(" + event.getX() + "," + event.getY() + ") Delta: (" + deltaX + "," + deltaY + ")");
         x = event.getX();
         y = event.getY();
         return true;
@@ -37,13 +34,5 @@ public class MouseMotionInputAction {
 
     public int getY() {
         return y;
-    }
-
-    public int getDeltaX() {
-        return deltaX;
-    }
-
-    public int getDeltaY() {
-        return deltaY;
     }
 }

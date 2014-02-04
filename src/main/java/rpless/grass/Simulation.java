@@ -62,7 +62,7 @@ public class Simulation implements GLEventListener {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
         shaderProgram.uniform(gl, "cameraMatrix", camera.lookAt());
-        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, 0, -5).multiply(Matrix4fUtil.rotateY(45)));
+        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(-1, 0, -5).multiply(Matrix4fUtil.rotateY(45)));
         mesh.display(gl);
     }
 

@@ -101,8 +101,8 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
 
     @Override
     public void keyPressed(KeyEvent event) {
-        if (moveLeft.isDetected(event)) camera.strafeRight(-0.15f);
-        if (moveRight.isDetected(event)) camera.strafeRight(0.15f);
+        if (moveLeft.isDetected(event)) camera.strafeRight(0.15f);
+        if (moveRight.isDetected(event)) camera.strafeRight(-0.15f);
         if (moveForward.isDetected(event)) camera.moveForward(0.175f);
         if (moveBack.isDetected(event)) camera.moveForward(-0.15f);
         if (closeSimulation.isDetected(event)) window.stop();
@@ -113,13 +113,13 @@ public class Simulation extends MouseAdapter implements GLEventListener, KeyList
 
     @Override
     public void mouseMoved(MouseEvent mouseEvent) {
-        int dx = mouseEvent.getX() - 400;
-        int dy = mouseEvent.getY() - 300;
+        int dx = mouseEvent.getX() - (int) (SimulationWindow.WIDTH / 2);
+        int dy = mouseEvent.getY() - (int) (SimulationWindow.HEIGHT / 2);
         if (recentering && dx == 0 && dy == 0) {
             recentering = false;
         } else if (motion.isDetected(mouseEvent)) {
-            camera.rotateX(dy > 0 ? -1 : 1);
-            camera.rotateY(dx > 0 ? -1 : 1);
+            if (dy != 0) camera.pitch(dy > 0 ? -0.01f : 0.01f);
+            if (dx != 0) camera.yaw(dx > 0 ? 0.01f : -0.01f);
             recenter();
         }
     }

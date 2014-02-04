@@ -1,12 +1,13 @@
 package rpless.grass;
 
 
+import rpless.grass.math.CommonMath;
 import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Vector3f;
 
 public class Camera {
 
-    private Vector3f position, view, right, up;
+    private Vector3f position, view, right, lockedUp, rotatedUp;
     private float xRotation, yRotation, zRotation;
 
     /**
@@ -16,8 +17,9 @@ public class Camera {
     public Camera() {
         position = Vector3f.zero();
         view = Vector3f.of(0, 0, -1.0f);
-        right = Vector3f.of(1.0f, 0, 0);
-        up = Vector3f.of(0, 1.0f, 0);
+        lockedUp = Vector3f.of(0, 1.0f, 0);
+        rotatedUp = Vector3f.of(0, 1.0f, 0);
+        right = lockedUp.crossProduct(view);
         xRotation = 0;
         yRotation = 0;
         zRotation = 0;
@@ -28,45 +30,34 @@ public class Camera {
     }
 
     public void moveForward(float distance) {
-        this.move(view.multiply(distance));
+        this.move(view.normalize().multiply(distance));
     }
 
     public void strafeRight(float distance) {
-        this.move(right.multiply(distance));
+        this.move(right.normalize().multiply(distance));
     }
 
     public void moveUp(float distance) {
-        this.move(up.multiply(distance));
+        this.move(lockedUp.normalize().multiply(distance));
     }
 
-    /**
-     * @param angle An angle in degrees
-     */
-    public void rotateX(float angle) {
-        xRotation += angle;
-
-        Vector3f u = up.multiply((float) Math.sin(Math.toRadians(angle)));
-        view = view.multiply((float) Math.cos(Math.toRadians(angle))).add(u).normalize();
-
-        up = view.crossProduct(right).negate();
+    public void roll(float alpha) {
+        this.right = CommonMath.rotate(right, view, alpha);
+        this.lockedUp = CommonMath.rotate(lockedUp, view, alpha);
+        if (!rotatedUp.equals(view)) {
+            rotatedUp = CommonMath.rotate(rotatedUp, view, alpha);
+        }
     }
 
-    public void rotateY(float angle) {
-        yRotation += angle;
-
-        Vector3f u = right.multiply((float) Math.sin(Math.toRadians(angle)));
-        view = view.multiply((float) Math.cos(Math.toRadians(angle))).subtract(u).normalize();
-
-        right = view.crossProduct(up);
+    public void pitch(float alpha) {
+        this.view = CommonMath.rotate(view, right, alpha);
+        this.lockedUp = CommonMath.rotate(lockedUp, right, alpha);
     }
 
-    public void rotateZ(float angle) {
-        zRotation += angle;
-
-        Vector3f u = up.multiply((float) Math.sin(Math.toRadians(angle)));
-        right = right.multiply((float) Math.cos(Math.toRadians(angle))).add(u).normalize();
-
-        up = view.crossProduct(right).negate();
+    public void yaw(float alpha) {
+        if (!view.equals(rotatedUp)) this.view = CommonMath.rotate(view, rotatedUp, alpha);
+        if (!right.equals(rotatedUp)) this.right = CommonMath.rotate(right, rotatedUp, alpha);
+        if (!lockedUp.equals(rotatedUp)) this.lockedUp = CommonMath.rotate(lockedUp, rotatedUp, alpha);
     }
 
     /**
@@ -75,7 +66,7 @@ public class Camera {
     public Matrix4f lookAt() {
         Vector3f center = position.add(view);
         Vector3f f = center.subtract(position).normalize();
-        Vector3f uNorm = up.normalize();
+        Vector3f uNorm = lockedUp.normalize();
         Vector3f s = f.crossProduct(uNorm);
         Vector3f u = s.crossProduct(f);
 

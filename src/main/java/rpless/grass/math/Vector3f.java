@@ -57,6 +57,10 @@ public class Vector3f {
         return (float) Math.sqrt((x * x) + (y * y) + (z * z));
     }
 
+    public float dotProduct(Vector3f v) {
+        return (this.x * v.x()) + (this.y * v.y()) + (this.z * v.z());
+    }
+
     public Vector3f crossProduct(Vector3f v) {
         float nx = (this.y() * v.z()) - (this.z() * v.y());
         float ny = (this.z() * v.x()) - (this.x() * v.z());

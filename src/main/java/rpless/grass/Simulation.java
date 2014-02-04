@@ -1,15 +1,7 @@
 package rpless.grass;
 
 import com.jogamp.common.nio.Buffers;
-import com.jogamp.newt.event.KeyEvent;
-import com.jogamp.newt.event.KeyListener;
-import rpless.grass.gl.shader.FragmentShader;
-import rpless.grass.gl.shader.ShaderProgram;
-import rpless.grass.gl.shader.ShaderProgramFactory;
-import rpless.grass.gl.shader.VertexShader;
-import rpless.grass.input.KeyInputAction;
-import rpless.grass.input.recognizers.KeyCodeRecognizer;
-import rpless.grass.input.recognizers.KeyPressRecognizer;
+import rpless.grass.gl.shader.*;
 import rpless.grass.math.Matrix4fUtil;
 import rpless.grass.mesh.Mesh;
 import rpless.grass.mesh.MeshFactory;
@@ -30,6 +22,7 @@ public class Simulation implements GLEventListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
+    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "geometry.glsl");
 
     private SimulationWindow window;
     private Camera camera = new Camera();
@@ -54,7 +47,7 @@ public class Simulation implements GLEventListener {
         gl.glEnable(GL4.GL_DEPTH_TEST);
         gl.glDepthFunc(GL4.GL_LEQUAL);
 
-        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
+        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath), new GeometryShader(geometryShaderPath));
         shaderProgram.useProgram(gl);
         shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 

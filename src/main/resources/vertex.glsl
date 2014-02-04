@@ -7,9 +7,11 @@ uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-smooth out vec4 fragmentColor;
+out vertexData {
+  vec4 color;
+} vertex;
 
 void main() {
   gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * position;
-  fragmentColor = color;
+  vertex.color = color;
 }

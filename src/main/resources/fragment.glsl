@@ -1,7 +1,9 @@
 #version 330
 
-smooth in vec4 fragmentColor;
+in fragmentData {
+  vec4 color;
+} frag;
 
 void main() {
-  gl_FragColor = fragmentColor;
+  gl_FragColor = frag.color;
 }

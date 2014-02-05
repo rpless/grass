@@ -1,9 +1,7 @@
 #version 330
 
-in fragmentData {
-  vec4 color;
-} frag;
+in vec4 gColor;
 
 void main() {
-  gl_FragColor = frag.color;
+  gl_FragColor = gColor;
 }

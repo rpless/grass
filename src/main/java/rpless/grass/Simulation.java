@@ -22,7 +22,7 @@ public class Simulation implements GLEventListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
-    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "geometry.glsl");
+    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "pass-through-geom.glsl");
 
     private SimulationWindow window;
     private Camera camera = new Camera();

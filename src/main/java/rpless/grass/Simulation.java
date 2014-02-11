@@ -22,7 +22,7 @@ public class Simulation implements GLEventListener {
 
     private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
-    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "pass-through-geom.glsl");
+    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "grass.glsl");
 
     private SimulationWindow window;
     private Camera camera = new Camera();
@@ -62,14 +62,14 @@ public class Simulation implements GLEventListener {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
         shaderProgram.uniform(gl, "cameraMatrix", camera.lookAt());
-        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(-1, 0, -5).multiply(Matrix4fUtil.rotateY(45)));
+        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(-1, 0, -5));
         mesh.display(gl);
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL4 gl = drawable.getGL().getGL4();
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(60, ((float) width) / ((float) height), 0.1f, 100.0f));
+        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
     }
 
     @Override

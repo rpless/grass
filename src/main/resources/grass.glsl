@@ -11,29 +11,33 @@ layout(triangle_strip, max_vertices=6) out;
 
 out vec4 gColor;
 
+vec4 bary(float R, float S) {
+  if (R + S >= 1) {
+    R = 1 - R;
+    S = 1 - S;
+  }
+  return gl_in[0].gl_Position + (R * (gl_in[1].gl_Position - gl_in[0].gl_Position)) + (S * (gl_in[2].gl_Position - gl_in[0].gl_Position));
+}
+
 void main() {
+  mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix;
   for (int i = 0; i < gl_in.length(); i++) {
-    gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * gl_in[i].gl_Position;
+    gl_Position = PCMMatrix * gl_in[i].gl_Position;
     gColor = vColor[i];
     EmitVertex();
   }
   EndPrimitive();
 
-  float R = 0.4;
-  float S = 0.4;
-  vec4 A = gl_in[0].gl_Position;
-  vec4 B = gl_in[1].gl_Position;
-  vec4 C = gl_in[2].gl_Position;
-  vec4 bary = A + (R * (B - A)) + (S * (C - A));
+  vec4 coordinate = bary(0.5, 0.5);
 
   // Emit coordinates
-  gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * bary;
+  gl_Position = PCMMatrix * coordinate;
   gColor = vColor[0] + vec4(0.4, 0, 0, 0);
   EmitVertex();
-  gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * (bary + vec4(0.1, 0, 0, 0));
+  gl_Position = PCMMatrix * (coordinate - vec4(0.01, 0, 0, 0));
   gColor = vColor[0] + vec4(0.4, 0, 0, 0);
   EmitVertex();
-  gl_Position = perspectiveMatrix * cameraMatrix * modelMatrix * (bary + vec4(0.1, 0.1, 0, 0));
+  gl_Position = PCMMatrix * (coordinate + vec4(0.005, 0.1, 0, 0));
   gColor = vColor[0] + vec4(0.4, 0, 0, 0);
   EmitVertex();
   EndPrimitive();

@@ -31,14 +31,13 @@ void main() {
   vec4 coordinate = bary(0.5, 0.5);
 
   // Emit coordinates
-  gl_Position = PCMMatrix * coordinate;
   gColor = vColor[0] + vec4(0.4, 0, 0, 0);
+  
+  gl_Position = PCMMatrix * coordinate;
   EmitVertex();
   gl_Position = PCMMatrix * (coordinate - vec4(0.01, 0, 0, 0));
-  gColor = vColor[0] + vec4(0.4, 0, 0, 0);
   EmitVertex();
-  gl_Position = PCMMatrix * (coordinate + vec4(0.005, 0.1, 0, 0));
-  gColor = vColor[0] + vec4(0.4, 0, 0, 0);
+  gl_Position = PCMMatrix * (coordinate + vec4(-0.005, 0.1, 0, 0));
   EmitVertex();
   EndPrimitive();
 }

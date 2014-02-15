@@ -1,7 +1,14 @@
 Next Steps:
-- mouse
-- Pass through geometry shader
+- Determine a way to create grass
+    * Random values?
+    * Density Mapping?
+    * generate CPU side and pass in the via the vertex buffer
+- Need a Better Grass shape
+- vary the size of the grass blades
+- vary the angle/direction of the grass blades
 
-At some point:
-- Refactor Shader Compilation
-- loading meshes from a file
+
+Reach Goals:
+ - Level of Detail based on distance
+ - Wind
+ - Better light model

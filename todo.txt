@@ -11,4 +11,4 @@ Next Steps:
 Reach Goals:
  - Level of Detail based on distance
  - Wind
- - Better light model
+ - Better light model (i.e actually use one)

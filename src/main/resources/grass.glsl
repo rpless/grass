@@ -7,7 +7,7 @@ uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-layout(triangle_strip, max_vertices=15) out;
+layout(triangle_strip, max_vertices=303) out;
 
 out vec4 gColor;
 
@@ -27,8 +27,10 @@ void main() {
   }
   EndPrimitive();
 
-  vec4 coordinate = bary(rand(vec2(40, 20)), rand(vec2(0.4, 0.2)));
-  grassBlade(coordinate, PCMMatrix);
+  for (int i = 0; i < 25; i++) {
+    vec4 coordinate = bary(rand(vec2(3 * i, i / 3)), rand(vec2(50 * i + 1, sin(i) * 15)));
+    grassBlade(coordinate, PCMMatrix);
+  }
 }
 
 void grassBlade(vec4 center, mat4 PCMMatrix) {
@@ -39,7 +41,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 E = center + vec4(0, 0.1, 0, 0);
 
   // Emit coordinates
-  gColor = vColor[0] + vec4(0.4, 0, 0, 0);
+  gColor = vec4(0.4, 0, 0, 0);
 
   gl_Position = PCMMatrix * A;
   EmitVertex();
@@ -74,7 +76,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   EndPrimitive();
 }
 
-float rand(vec2 co){
+float rand(vec2 co) {
   return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
 }
 

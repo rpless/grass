@@ -14,8 +14,7 @@ out vec4 gColor;
 // Helper Function Signatures
 void initMT(uint seed, uint m1, uint m2, uint tmat);
 float random();
-float rand(vec2 co);
-vec4 bary(float R, float S);
+vec4 randomBarycentricCoordinate();
 void grassBlade(vec4 center, mat4 PCMMatrix);
 
 void main() {
@@ -30,9 +29,7 @@ void main() {
   EndPrimitive();
 
   for (int i = 0; i < 25; i++) {
-    //vec4 coordinate = bary(rand(vec2(3 * i, i / 3)), rand(vec2(50 * i + 1, sin(i) * 15)));
-    vec4 coordinate = bary(random(), random());
-    grassBlade(coordinate, PCMMatrix);
+    grassBlade(randomBarycentricCoordinate(), PCMMatrix);
   }
 }
 
@@ -82,7 +79,10 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   EndPrimitive();
 }
 
-vec4 bary(float R, float S) {
+// Produce a psuedo random point that exists on the current primitive.
+vec4 randomBarycentricCoordinate() {
+  float R = random();
+  float S = random();
   if (R + S >= 1) {
     R = 1 - R;
     S = 1 - S;

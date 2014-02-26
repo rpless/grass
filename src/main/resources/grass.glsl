@@ -11,6 +11,17 @@ layout(triangle_strip, max_vertices=303) out;
 
 out vec4 gColor;
 
+// Mersenne Twistter Signatures & Constants
+struct mersenneTwister {
+  uint status[4];
+  uint m1;
+  uint m2;
+  uint tmat;
+} MT;
+
+void initMT(uint seed, uint m1, uint m2, uint tmat);
+float random();
+
 // Helper Function Signatures
 float rand(vec2 co);
 vec4 bary(float R, float S);
@@ -18,7 +29,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix);
 
 void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
-
+  initMT(234340U, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
   // Emit the original triangle
   for (int i = 0; i < gl_in.length(); i++) {
     gl_Position = PCMMatrix * gl_in[i].gl_Position;
@@ -28,7 +39,8 @@ void main() {
   EndPrimitive();
 
   for (int i = 0; i < 25; i++) {
-    vec4 coordinate = bary(rand(vec2(3 * i, i / 3)), rand(vec2(50 * i + 1, sin(i) * 15)));
+    //vec4 coordinate = bary(rand(vec2(3 * i, i / 3)), rand(vec2(50 * i + 1, sin(i) * 15)));
+    vec4 coordinate = bary(random(), random());
     grassBlade(coordinate, PCMMatrix);
   }
 }
@@ -86,4 +98,41 @@ vec4 bary(float R, float S) {
     S = 1 - S;
   }
   return gl_in[0].gl_Position + (R * (gl_in[1].gl_Position - gl_in[0].gl_Position)) + (S * (gl_in[2].gl_Position - gl_in[0].gl_Position));
+}
+
+// Mersenne Twister Implementation
+
+void initMT(uint seed, uint m1, uint m2, uint tmat) {
+  MT.status[0] = seed;
+  MT.status[1] = m1;
+  MT.status[2] = m2;
+  MT.status[3] = tmat;
+
+  for (uint i = 1U; i < 8U; i++) {
+    MT.status[i & 3U] ^= i + 1812433253U * MT.status[(i - 1U) & 3U] ^ (MT.status[(i - 1U) & 3U] >> 30);
+  }
+  for (uint i = 1U; i < 8U; i++) {
+    random();
+  }
+}
+
+float random() {
+  uint x = MT.status[3];
+  uint y = (MT.status[0] & 0x7fffffffU) ^ MT.status[1] ^ MT.status[2];
+  x ^= (x << 1);
+  y ^= (y << 1) ^ x;
+  MT.status[0] = MT.status[1];
+  MT.status[1] = MT.status[2];
+  MT.status[2] = x ^ (y << 10);
+  MT.status[3] = y;
+  MT.status[1] ^= - (y & 1U) & MT.m1;
+  MT.status[2] ^= - (y & 1U) & MT.m2;
+
+  uint t0, t1;
+  t0 = MT.status[3];
+  t1 = MT.status[0] + (MT.status[2] >> 8);
+  t0 ^= t1;
+  t0 ^= -(t1 & 1U) & MT.tmat;
+
+  return t0 * (1.0f / 4294967296.0f);
 }

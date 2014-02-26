@@ -1,8 +1,4 @@
 Next Steps:
-- Determine a way to create grass
-    * Random values?
-    * Density Mapping?
-    * generate CPU side and pass in the via the vertex buffer
 - Need a Better Grass shape
 - vary the size of the grass blades
 - vary the angle/direction of the grass blades

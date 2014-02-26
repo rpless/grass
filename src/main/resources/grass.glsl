@@ -11,18 +11,9 @@ layout(triangle_strip, max_vertices=303) out;
 
 out vec4 gColor;
 
-// Mersenne Twistter Signatures & Constants
-struct mersenneTwister {
-  uint status[4];
-  uint m1;
-  uint m2;
-  uint tmat;
-} MT;
-
+// Helper Function Signatures
 void initMT(uint seed, uint m1, uint m2, uint tmat);
 float random();
-
-// Helper Function Signatures
 float rand(vec2 co);
 vec4 bary(float R, float S);
 void grassBlade(vec4 center, mat4 PCMMatrix);
@@ -45,6 +36,9 @@ void main() {
   }
 }
 
+// Generate a single blade of grass
+// center - The vector representing the point that center of the base of blade of grass should be placed
+// PCMMatrix - The matrix that is a precompution of the multiplication of the Projection, Camera, and Model Matrices
 void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 A = center + vec4(0, 0, 0.01, 0);
   vec4 B = center + vec4(0.0025, 0, 0, 0);
@@ -88,10 +82,6 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   EndPrimitive();
 }
 
-float rand(vec2 co) {
-  return fract(sin(dot(co.xy ,vec2(12.9898,78.233))) * 43758.5453);
-}
-
 vec4 bary(float R, float S) {
   if (R + S >= 1) {
     R = 1 - R;
@@ -101,7 +91,15 @@ vec4 bary(float R, float S) {
 }
 
 // Mersenne Twister Implementation
+// Represents the Mersenne Twistter's Internal State
+struct mersenneTwister {
+  uint status[4];
+  uint m1;
+  uint m2;
+  uint tmat;
+} MT;
 
+// Initialize the Mersenne Twistter.
 void initMT(uint seed, uint m1, uint m2, uint tmat) {
   MT.status[0] = seed;
   MT.status[1] = m1;
@@ -116,6 +114,7 @@ void initMT(uint seed, uint m1, uint m2, uint tmat) {
   }
 }
 
+// Produce a psuedo-random float value.
 float random() {
   uint x = MT.status[3];
   uint y = (MT.status[0] & 0x7fffffffU) ^ MT.status[1] ^ MT.status[2];

@@ -106,10 +106,10 @@ void initMT(uint seed, uint m1, uint m2, uint tmat) {
   MT.status[2] = m2;
   MT.status[3] = tmat;
 
-  for (uint i = 1U; i < 8U; i++) {
-    MT.status[i & 3U] ^= i + 1812433253U * MT.status[(i - 1U) & 3U] ^ (MT.status[(i - 1U) & 3U] >> 30);
+  for (int i = 1; i < 8; i++) {
+    MT.status[i & 3] ^= uint(i) + 1812433253U * MT.status[(i - 1) & 3] ^ (MT.status[(i - 1) & 3] >> 30);
   }
-  for (uint i = 1U; i < 8U; i++) {
+  for (int i = 0; i < 8; i++) {
     random();
   }
 }

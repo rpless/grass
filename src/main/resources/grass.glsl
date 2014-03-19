@@ -16,7 +16,6 @@ void initMT(uint seed, uint m1, uint m2, uint tmat);
 float random();
 vec4 randomBarycentricCoordinate();
 void grassBlade(vec4 center, mat4 PCMMatrix);
-
 void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
   initMT(234340U, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
@@ -45,38 +44,21 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
 
   // Emit coordinates
   gColor = vec4(0.4, 0, 0, 0);
+  createTriangle(PCMMatrix, A, D, E);
+  createTriangle(PCMMatrix, A, B, E);
+  createTriangle(PCMMatrix, C, D, E);
+  createTriangle(PCMMatrix, C, B, E);
+}
 
-  gl_Position = PCMMatrix * A;
-  EmitVertex();
-  gl_Position = PCMMatrix * D;
-  EmitVertex();
-  gl_Position = PCMMatrix * E;
-  EmitVertex();
-  EndPrimitive();
-
-  gl_Position = PCMMatrix * A;
-  EmitVertex();
-  gl_Position = PCMMatrix * B;
-  EmitVertex();
-  gl_Position = PCMMatrix * E;
-  EmitVertex();
-  EndPrimitive();
-
-  gl_Position = PCMMatrix * C;
-  EmitVertex();
-  gl_Position = PCMMatrix * D;
-  EmitVertex();
-  gl_Position = PCMMatrix * E;
-  EmitVertex();
-  EndPrimitive();
-
-  gl_Position = PCMMatrix * C;
-  EmitVertex();
-  gl_Position = PCMMatrix * B;
-  EmitVertex();
-  gl_Position = PCMMatrix * E;
-  EmitVertex();
-  EndPrimitive();
+// Create a vertex with the given matrix and three vertexes
+void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C) {
+    gl_Position = PCMMatrix * A;
+    EmitVertex();
+    gl_Position = PCMMatrix * B;
+    EmitVertex();
+    gl_Position = PCMMatrix * C;
+    EmitVertex();
+    EndPrimitive();
 }
 
 // Produce a psuedo random point that exists on the current primitive.
@@ -90,7 +72,7 @@ vec4 randomBarycentricCoordinate() {
   return gl_in[0].gl_Position + (R * (gl_in[1].gl_Position - gl_in[0].gl_Position)) + (S * (gl_in[2].gl_Position - gl_in[0].gl_Position));
 }
 
-// Mersenne Twister Implementation
+// TinyMT Implementation
 // Represents the Mersenne Twistter's Internal State
 struct mersenneTwister {
   uint status[4];
@@ -114,7 +96,7 @@ void initMT(uint seed, uint m1, uint m2, uint tmat) {
   }
 }
 
-// Produce a psuedo-random float value.
+// Produce a psuedo-random float value on the range [0, 1]
 float random() {
   uint x = MT.status[3];
   uint y = (MT.status[0] & 0x7fffffffU) ^ MT.status[1] ^ MT.status[2];

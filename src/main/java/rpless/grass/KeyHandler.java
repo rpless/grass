@@ -24,10 +24,10 @@ public class KeyHandler implements KeyListener {
 
     @Override
     public void keyPressed(KeyEvent event) {
-        if (moveLeft.isDetected(event)) camera.strafeRight(0.15f);
-        if (moveRight.isDetected(event)) camera.strafeRight(-0.15f);
-        if (moveForward.isDetected(event)) camera.moveForward(0.175f);
-        if (moveBack.isDetected(event)) camera.moveForward(-0.15f);
+        if (moveLeft.isDetected(event)) camera.strafeRight(0.05f);
+        if (moveRight.isDetected(event)) camera.strafeRight(-0.05f);
+        if (moveForward.isDetected(event)) camera.moveForward(0.075f);
+        if (moveBack.isDetected(event)) camera.moveForward(-0.05f);
         if (closeSimulation.isDetected(event)) window.stop();
     }
 

@@ -16,6 +16,9 @@ void initMT(uint seed, uint m1, uint m2, uint tmat);
 float random();
 vec4 randomBarycentricCoordinate();
 void grassBlade(vec4 center, mat4 PCMMatrix);
+void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C);
+
+
 void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
   initMT(234340U, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
@@ -27,7 +30,7 @@ void main() {
   }
   EndPrimitive();
 
-  for (int i = 0; i < 25; i++) {
+  for (int i = 0; i < 1; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);
   }
 }
@@ -36,18 +39,17 @@ void main() {
 // center - The vector representing the point that center of the base of blade of grass should be placed
 // PCMMatrix - The matrix that is a precompution of the multiplication of the Projection, Camera, and Model Matrices
 void grassBlade(vec4 center, mat4 PCMMatrix) {
-  vec4 A = center + vec4(0, 0, 0.01, 0);
-  vec4 B = center + vec4(0.0025, 0, 0, 0);
-  vec4 C = center - vec4(0, 0, 0.01, 0);
-  vec4 D = center - vec4(0.0025, 0, 0, 0);
-  vec4 E = center + vec4(0, 0.1, 0, 0);
+  vec4 A = center + vec4(0.0025f, 0, 0, 0);
+  vec4 B = center + vec4(-0.0025f, 0, 0, 0);
+  vec4 C = center + vec4(0.0025f, 0.025f, 0, 0);
+  vec4 D = center + vec4(-0.0025f, 0.025f, 0, 0);
+  vec4 E = center + vec4(0, 0.035f, 0, 0);
 
   // Emit coordinates
   gColor = vec4(0.4, 0, 0, 0);
-  createTriangle(PCMMatrix, A, D, E);
-  createTriangle(PCMMatrix, A, B, E);
+  createTriangle(PCMMatrix, A, B, C);
+  createTriangle(PCMMatrix, C, D, B);
   createTriangle(PCMMatrix, C, D, E);
-  createTriangle(PCMMatrix, C, B, E);
 }
 
 // Create a vertex with the given matrix and three vertexes

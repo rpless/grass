@@ -7,7 +7,7 @@ uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-layout(triangle_strip, max_vertices=228) out; // 3 * (9 * 25)
+layout(triangle_strip, max_vertices=93) out; // 3 * (9 * 10)
 
 out vec4 gColor;
 
@@ -21,7 +21,8 @@ void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C);
 
 void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
-  initMT(234340U, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
+  uint instanceFactor = uint(gl_PrimitiveID);
+  initMT(234340U * instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
   // Emit the original triangle
   for (int i = 0; i < gl_in.length(); i++) {
     gl_Position = PCMMatrix * gl_in[i].gl_Position;
@@ -30,7 +31,7 @@ void main() {
   }
   EndPrimitive();
 
-  for (int i = 0; i < 25; i++) {
+  for (int i = 0; i < 10; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);
   }
 }
@@ -39,10 +40,10 @@ void main() {
 // center - The vector representing the point that center of the base of blade of grass should be placed
 // PCMMatrix - The matrix that is a precompution of the multiplication of the Projection, Camera, and Model Matrices
 void grassBlade(vec4 center, mat4 PCMMatrix) {
-  vec4 A = center + vec4(0.0025f, 0, 0, 0);
-  vec4 B = center + vec4(-0.0025f, 0, 0, 0);
-  vec4 C = center + vec4(0.0025f, 0.025f, 0, 0);
-  vec4 D = center + vec4(-0.0025f, 0.025f, 0, 0);
+  vec4 A = center + vec4(0.0015f, 0, 0, 0);
+  vec4 B = center + vec4(-0.0015f, 0, 0, 0);
+  vec4 C = center + vec4(0.0015f, 0.025f, 0, 0);
+  vec4 D = center + vec4(-0.0015f, 0.025f, 0, 0);
   vec4 E = center + vec4(0, 0.035f, 0, 0);
 
   // Emit coordinates

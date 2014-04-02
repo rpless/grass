@@ -6,10 +6,10 @@ import java.nio.ShortBuffer;
 public class Data {
     public static final FloatBuffer vertexData = FloatBuffer.wrap(new float[] {
             0.0f, 0.0f, 0.0f, 1.0f,   0.60f,  0.45f,  0.3f,  1.0f,
-            0.25f, 0.0f, 0.0f, 1.0f,  0.60f,  0.45f,  0.3f,  1.0f,
-            0.0f, 0.0f, 0.25f, 1.0f,  0.60f,  0.45f,  0.3f,  1.0f,
+            0.05f, 0.0f, 0.0f, 1.0f,  0.60f,  0.45f,  0.3f,  1.0f,
+            0.0f, 0.0f, 0.05f, 1.0f,  0.60f,  0.45f,  0.3f,  1.0f,
 
-            0.25f, 0.0f, 0.25f, 1.0f, 0.60f,  0.45f,  0.3f,  1.0f,
+            0.05f, 0.0f, 0.05f, 1.0f, 0.60f,  0.45f,  0.3f,  1.0f,
     });
 
     public static final ShortBuffer indexData = ShortBuffer.wrap(new short[] {

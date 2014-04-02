@@ -20,9 +20,9 @@ import java.nio.file.Paths;
  */
 public class Simulation implements GLEventListener {
 
-    private final Path vertexShaderPath = Paths.get("src", "main", "resources", "vertex.glsl");
+    private final Path vertexShaderPath = Paths.get("src", "main", "resources", "ground-vertex.glsl");
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
-    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "grass.glsl");
+//    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "grass.glsl");
 
     private SimulationWindow window;
     private Camera camera = new Camera();
@@ -47,7 +47,7 @@ public class Simulation implements GLEventListener {
         gl.glEnable(GL4.GL_DEPTH_TEST);
         gl.glDepthFunc(GL4.GL_LEQUAL);
 
-        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath), new GeometryShader(geometryShaderPath));
+        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
         shaderProgram.useProgram(gl);
         shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 

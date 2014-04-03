@@ -1,7 +1,6 @@
 #version 330
 
 layout(location = 0) in vec4 position;
-layout(location = 1) in vec4 color;
 
 uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
@@ -11,5 +10,5 @@ out vec4 Color;
 
 void main() {
   gl_Position = ((perspectiveMatrix * cameraMatrix) * modelMatrix) * position;
-  Color = color;
+  Color = vec4(0.60f,  0.45f,  0.3f,  1.0f);
 }

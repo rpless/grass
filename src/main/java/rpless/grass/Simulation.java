@@ -24,13 +24,11 @@ public class Simulation implements GLEventListener {
     private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
 //    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "grass.glsl");
 
-    private SimulationWindow window;
     private Camera camera = new Camera();
     private ShaderProgram shaderProgram;
     private Mesh mesh;
 
     public Simulation(SimulationWindow window) {
-        this.window = window;
         MouseHandler mouseHandler = new MouseHandler(window, camera);
         KeyHandler keyHandler = new KeyHandler(window, camera);
         window.addGLEventListener(this);
@@ -52,8 +50,7 @@ public class Simulation implements GLEventListener {
         shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 
         mesh = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
-                new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false),
-                new MeshFormat(shaderProgram.getAttributeLocation("color"), 4, GL4.GL_FLOAT, 4 * Buffers.SIZEOF_FLOAT, false));
+                new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
         mesh.enable(gl);
     }
 

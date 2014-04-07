@@ -6,7 +6,7 @@ uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-layout(triangle_strip, max_vertices=90) out; // (9 * 10)
+layout(triangle_strip, max_vertices=180) out; // (9 * 20)
 
 out vec4 Color;
 
@@ -23,7 +23,7 @@ void main() {
   uint instanceFactor = uint(gl_PrimitiveID);
   initMT(234340U * instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
 
-  for (int i = 0; i < 10; i++) {
+  for (int i = 0; i < 20; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);
   }
 }
@@ -34,9 +34,9 @@ void main() {
 void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 A = center + vec4(0.0015f, 0, 0, 0);
   vec4 B = center + vec4(-0.0015f, 0, 0, 0);
-  vec4 C = center + vec4(0.0015f, 0.025f, 0, 0);
-  vec4 D = center + vec4(-0.0015f, 0.025f, 0, 0);
-  vec4 E = center + vec4(0, 0.035f, 0, 0);
+  vec4 C = center + vec4(0.0015f, 0.05f, 0, 0);
+  vec4 D = center + vec4(-0.0015f, 0.05f, 0, 0);
+  vec4 E = center + vec4(0, 0.15f, 0, 0);
 
   // Emit coordinates
   Color = vec4(0, 0.55, 0.05, 0);

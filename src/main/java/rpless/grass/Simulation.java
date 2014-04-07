@@ -50,6 +50,7 @@ public class Simulation implements GLEventListener {
         gl.glClearDepth(1.0f);
         gl.glEnable(GL4.GL_DEPTH_TEST);
         gl.glDepthFunc(GL4.GL_LEQUAL);
+        gl.glLineWidth(3);
 
         groundShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(groundVertexPath), new FragmentShader(fragmentVertexPath));
         groundShaderProgram.useProgram(gl);

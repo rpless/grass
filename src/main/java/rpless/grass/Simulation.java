@@ -1,7 +1,7 @@
 package rpless.grass;
 
-import com.jogamp.common.nio.Buffers;
 import rpless.grass.gl.shader.*;
+import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Matrix4fUtil;
 import rpless.grass.mesh.Mesh;
 import rpless.grass.mesh.MeshFactory;
@@ -20,13 +20,19 @@ import java.nio.file.Paths;
  */
 public class Simulation implements GLEventListener {
 
-    private final Path vertexShaderPath = Paths.get("src", "main", "resources", "ground-vertex.glsl");
-    private final Path fragmentShaderPath = Paths.get("src", "main", "resources", "fragment.glsl");
-//    private final Path geometryShaderPath = Paths.get("src", "main", "resources", "grass.glsl");
+    // Ground Shader
+    private final Path groundVertexPath = Paths.get("src", "main", "resources", "ground-vertex.glsl");
+    private final Path fragmentVertexPath = Paths.get("src", "main", "resources", "fragment.glsl");
+    private ShaderProgram groundShaderProgram;
+
+    // Grass Shader
+    private final Path grassVertexPath = Paths.get("src", "main", "resources", "pass-through-vertex.glsl");
+    private final Path grassGeometryPath = Paths.get("src", "main", "resources", "grass.glsl");
+    private final Path grassFragmentPath = fragmentVertexPath;
+    private ShaderProgram grassShaderProgram;
 
     private Camera camera = new Camera();
-    private ShaderProgram shaderProgram;
-    private Mesh mesh;
+    private Mesh ground;
 
     public Simulation(SimulationWindow window) {
         MouseHandler mouseHandler = new MouseHandler(window, camera);
@@ -45,35 +51,56 @@ public class Simulation implements GLEventListener {
         gl.glEnable(GL4.GL_DEPTH_TEST);
         gl.glDepthFunc(GL4.GL_LEQUAL);
 
-        shaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(vertexShaderPath), new FragmentShader(fragmentShaderPath));
-        shaderProgram.useProgram(gl);
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
+        groundShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(groundVertexPath), new FragmentShader(fragmentVertexPath));
+        groundShaderProgram.useProgram(gl);
+        groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 
-        mesh = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
-                new MeshFormat(shaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
-        mesh.enable(gl);
+        ground = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
+                new MeshFormat(groundShaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
+        groundShaderProgram.disuseProgram(gl);
+
+
+        grassShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(grassVertexPath),
+                                                                 new GeometryShader(grassGeometryPath),
+                                                                 new FragmentShader(grassFragmentPath));
+        grassShaderProgram.useProgram(gl);
+        groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
+        grassShaderProgram.disuseProgram(gl);
     }
 
     @Override
     public void display(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
         gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
-        shaderProgram.uniform(gl, "cameraMatrix", camera.lookAt());
-        shaderProgram.uniform(gl, "modelMatrix", Matrix4fUtil.translate(0, -1, -3));
-        mesh.display(gl);
+        Matrix4f cameraTransform = camera.lookAt();
+        Matrix4f modelTransform = Matrix4fUtil.translate(0, -1, -3);
+
+        groundShaderProgram.useProgram(gl);
+        groundShaderProgram.uniform(gl, "cameraMatrix", cameraTransform);
+        groundShaderProgram.uniform(gl, "modelMatrix", modelTransform);
+        ground.enable(gl);
+        ground.display(gl);
+
+        grassShaderProgram.useProgram(gl);
+        grassShaderProgram.uniform(gl, "cameraMatrix", cameraTransform);
+        grassShaderProgram.uniform(gl, "modelMatrix", modelTransform);
+        ground.display(gl);
     }
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
         GL4 gl = drawable.getGL().getGL4();
-        shaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
+        groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
+        grassShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
     }
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
         GL4 gl = drawable.getGL().getGL4();
-        mesh.delete(gl);
-        shaderProgram.disuseProgram(gl);
-        shaderProgram.delete(gl);
+        ground.delete(gl);
+        groundShaderProgram.disuseProgram(gl);
+        groundShaderProgram.delete(gl);
+        grassShaderProgram.disuseProgram(gl);
+        grassShaderProgram.delete(gl);
     }
 }

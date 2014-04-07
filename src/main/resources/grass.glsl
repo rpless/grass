@@ -1,15 +1,14 @@
 #version 330
 
 layout(triangles, invocations = 1) in;
-in vec4 vColor[];
 
 uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-layout(triangle_strip, max_vertices=93) out; // 3 * (9 * 10)
+layout(triangle_strip, max_vertices=90) out; // (9 * 10)
 
-out vec4 gColor;
+out vec4 Color;
 
 // Helper Function Signatures
 void initMT(uint seed, uint m1, uint m2, uint tmat);
@@ -23,13 +22,6 @@ void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
   uint instanceFactor = uint(gl_PrimitiveID);
   initMT(234340U * instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
-  // Emit the original triangle
-  for (int i = 0; i < gl_in.length(); i++) {
-    gl_Position = PCMMatrix * gl_in[i].gl_Position;
-    gColor = vColor[i];
-    EmitVertex();
-  }
-  EndPrimitive();
 
   for (int i = 0; i < 10; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);
@@ -47,7 +39,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 E = center + vec4(0, 0.035f, 0, 0);
 
   // Emit coordinates
-  gColor = vec4(0, 0.55, 0.05, 0);
+  Color = vec4(0, 0.55, 0.05, 0);
   createTriangle(PCMMatrix, A, B, C);
   createTriangle(PCMMatrix, C, D, B);
   createTriangle(PCMMatrix, C, D, E);

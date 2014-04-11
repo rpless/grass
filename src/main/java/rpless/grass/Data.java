@@ -2,16 +2,10 @@ package rpless.grass;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
+import java.util.Arrays;
 
 public class Data {
-    public static final FloatBuffer vertexData = FloatBuffer.wrap(new float[] {
-            0.0f, 0.0f, 0.0f, 1.0f,
-            0.05f, 0.0f, 0.0f, 1.0f,
-            0.0f, 0.0f, 0.05f, 1.0f,
-            0.05f, 0.0f, 0.05f, 1.0f
-    });
-
-    public static final ShortBuffer indexData = ShortBuffer.wrap(new short[] {
-            0, 1, 2, 1, 2, 3
-    });
+    private static final TerrainBuilder builder = new TerrainBuilder(0.05f, 15, 15);
+    public static final FloatBuffer vertexData = builder.generateTerrain();
+    public static final ShortBuffer indexData = builder.generateIndices();
 }

@@ -1,10 +1,9 @@
 Next Steps:
-- Need a Better Grass shape
 - vary the size of the grass blades
 - vary the angle/direction of the grass blades
+- LOD rendering based on the modelMatrix
 
 
 Reach Goals:
- - Level of Detail based on distance
  - Wind
  - Better light model (i.e actually use one)

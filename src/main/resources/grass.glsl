@@ -21,7 +21,7 @@ void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C);
 void main() {
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix; // Precompute the perspective/camera/model matrix
   uint instanceFactor = uint(gl_PrimitiveID);
-  initMT(234340U * instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
+  initMT(234340U ^ instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
 
   for (int i = 0; i < 20; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);

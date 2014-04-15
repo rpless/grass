@@ -5,7 +5,7 @@ import java.nio.ShortBuffer;
 import java.util.Arrays;
 
 public class Data {
-    private static final TerrainBuilder builder = new TerrainBuilder(0.05f, 5, 5);
+    private static final TerrainBuilder builder = new TerrainBuilder(0.05f, 1, 1);
     public static final FloatBuffer vertexData = builder.generateTerrain();
     public static final ShortBuffer indexData = builder.generateIndices();
 }

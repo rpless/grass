@@ -32,9 +32,9 @@ void main() {
 // center - The vector representing the point that center of the base of blade of grass should be placed
 // PCMMatrix - The matrix that is a precompution of the multiplication of the Projection, Camera, and Model Matrices
 void grassBlade(vec4 center, mat4 PCMMatrix) {
-  float angle = random() * 360f;
-  float xAngle = cos(radians(angle)) * 0.0015f;
-  float yAngle = sin(radians(angle)) * 0.0015f;
+  float angle = radians(random() * 360f);
+  float xAngle = cos(angle) * 0.0015f;
+  float yAngle = sin(angle) * 0.0015f;
   vec4 A = center + vec4(xAngle, 0, yAngle, 0);
   vec4 B = center + vec4(-xAngle, 0, -yAngle, 0);
   vec4 C = center + vec4(xAngle, 0.05f, yAngle, 0);

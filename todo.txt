@@ -1,5 +1,6 @@
 Next Steps:
 - vary the size of the grass blades
+- vary the color of the grass blades
 - LOD rendering based on the modelMatrix
 
 

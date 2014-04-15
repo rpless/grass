@@ -1,6 +1,10 @@
-#Grass Simulation
+# Grass Simulation
 
 The goal of this project is to write a proof of concept geometry shader that generates grass.
+
+## Strategy 
+The idea is to use barycentric coordinates and a Mersenne Twister to generate random points on each triangle.
+From these random points, we can generate geometry that is shaped like blades of grass.
 
 ## Generating Randomness on the GPU
 To generate randomness I ported Mutsuo Saito's and Makoto Matsumoto's TinyMT mersenne twistter to GLSL.

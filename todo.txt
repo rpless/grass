@@ -1,6 +1,5 @@
 Next Steps:
 - vary the size of the grass blades
-- vary the angle/direction of the grass blades
 - LOD rendering based on the modelMatrix
 
 

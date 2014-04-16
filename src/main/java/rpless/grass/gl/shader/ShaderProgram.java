@@ -4,7 +4,7 @@ import rpless.grass.gl.NativeObject;
 import rpless.grass.math.Matrix4f;
 import rpless.grass.math.Matrix4fUtil;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 import java.util.Map;
 
 public class ShaderProgram extends NativeObject {
@@ -16,15 +16,15 @@ public class ShaderProgram extends NativeObject {
         this.uniforms = uniforms;
     }
 
-    public void useProgram(GL4 gl) {
+    public void useProgram(GL3 gl) {
         gl.glUseProgram(getHandle());
     }
 
-    public void disuseProgram(GL4 gl) {
+    public void disuseProgram(GL3 gl) {
         gl.glUseProgram(0);
     }
 
-    public void delete(GL4 gl) {
+    public void delete(GL3 gl) {
         gl.glDeleteProgram(getHandle());
     }
 
@@ -36,7 +36,7 @@ public class ShaderProgram extends NativeObject {
         return uniforms.get(name);
     }
 
-    public void uniform(GL4 gl, String location, Matrix4f matrix) {
+    public void uniform(GL3 gl, String location, Matrix4f matrix) {
         gl.glUniformMatrix4fv(this.getUniformLocation(location), 1, false, matrix.toArray(), 0);
     }
 }

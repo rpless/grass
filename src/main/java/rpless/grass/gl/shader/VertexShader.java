@@ -1,6 +1,6 @@
 package rpless.grass.gl.shader;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 import java.nio.file.Path;
 
 public class VertexShader extends Shader {
@@ -15,6 +15,6 @@ public class VertexShader extends Shader {
 
     @Override
     public int getType() {
-        return GL4.GL_VERTEX_SHADER;
+        return GL3.GL_VERTEX_SHADER;
     }
 }

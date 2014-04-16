@@ -37,7 +37,7 @@ public class SimulationWindow {
     private AnimatorBase animatorBase;
 
     public SimulationWindow() {
-        GLProfile profile = GLProfile.get(GLProfile.GL4);
+        GLProfile profile = GLProfile.get(GLProfile.GL3);
         System.out.println(profile);
         GLCapabilities capabilities = new GLCapabilities(profile);
         window = GLWindow.create(capabilities);

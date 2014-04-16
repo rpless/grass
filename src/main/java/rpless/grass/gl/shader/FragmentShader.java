@@ -1,6 +1,6 @@
 package rpless.grass.gl.shader;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 import java.nio.file.Path;
 
 public class FragmentShader extends Shader {
@@ -15,6 +15,6 @@ public class FragmentShader extends Shader {
 
     @Override
     public int getType() {
-        return GL4.GL_FRAGMENT_SHADER;
+        return GL3.GL_FRAGMENT_SHADER;
     }
 }

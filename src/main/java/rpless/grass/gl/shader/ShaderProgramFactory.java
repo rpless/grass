@@ -2,7 +2,7 @@ package rpless.grass.gl.shader;
 
 import com.jogamp.common.nio.Buffers;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 import java.util.Arrays;
@@ -12,7 +12,7 @@ import java.util.Map;
 
 public class ShaderProgramFactory {
 
-    public static ShaderProgram makeShader(GL4 gl, Shader... shaders) {
+    public static ShaderProgram makeShader(GL3 gl, Shader... shaders) {
         List<Shader> shaderList = Arrays.asList(shaders);
         int handle = gl.glCreateProgram();
         for (Shader shader : shaderList) {
@@ -31,10 +31,10 @@ public class ShaderProgramFactory {
         return new ShaderProgram(handle, getAttributeMap(gl, handle), getUniforms(gl, handle));
     }
 
-    private static Map<String, Integer> getAttributeMap(GL4 gl, int handle) {
+    private static Map<String, Integer> getAttributeMap(GL3 gl, int handle) {
         Map<String, Integer> attributes = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
-        gl.glGetProgramiv(handle, GL4.GL_ACTIVE_ATTRIBUTES, countBuffer);
+        gl.glGetProgramiv(handle, GL3.GL_ACTIVE_ATTRIBUTES, countBuffer);
         int limit = countBuffer.get();
         for (int i = 0; i < limit; i++) {
             IntBuffer length = IntBuffer.allocate(1);
@@ -48,10 +48,10 @@ public class ShaderProgramFactory {
         return attributes;
     }
 
-    private static Map<String, Integer> getUniforms(GL4 gl, int handle) {
+    private static Map<String, Integer> getUniforms(GL3 gl, int handle) {
         Map<String, Integer> uniforms = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
-        gl.glGetProgramiv(handle, GL4.GL_ACTIVE_UNIFORMS, countBuffer);
+        gl.glGetProgramiv(handle, GL3.GL_ACTIVE_UNIFORMS, countBuffer);
         int limit = countBuffer.get();
         for (int i = 0; i < limit; i++) {
             IntBuffer length = IntBuffer.allocate(1);
@@ -65,9 +65,9 @@ public class ShaderProgramFactory {
         return uniforms;
     }
 
-    private static void printLinkerError(GL4 gl, int handle) {
+    private static void printLinkerError(GL3 gl, int handle) {
         IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
-        gl.glGetProgramiv(handle, GL4.GL_INFO_LOG_LENGTH, logLengthBuffer);
+        gl.glGetProgramiv(handle, GL3.GL_INFO_LOG_LENGTH, logLengthBuffer);
         int length = logLengthBuffer.get();
 
         ByteBuffer data = Buffers.newDirectByteBuffer(length);
@@ -77,13 +77,13 @@ public class ShaderProgramFactory {
         System.err.println(new String(bytes));
     }
 
-    private static boolean isLinked(GL4 gl, int handle) {
+    private static boolean isLinked(GL3 gl, int handle) {
         IntBuffer status = Buffers.newDirectIntBuffer(1);
-        gl.glGetProgramiv(handle, GL4.GL_INFO_LOG_LENGTH, status);
-        return status.get() == GL4.GL_TRUE;
+        gl.glGetProgramiv(handle, GL3.GL_INFO_LOG_LENGTH, status);
+        return status.get() == GL3.GL_TRUE;
     }
 
-    private static void compileShader(GL4 gl, Shader shader) {
+    private static void compileShader(GL3 gl, Shader shader) {
         int handle = gl.glCreateShader(shader.getType());
         gl.glShaderSource(handle, 1, new String[] {shader.getSource()}, null, 0);
         gl.glCompileShader(handle);
@@ -93,15 +93,15 @@ public class ShaderProgramFactory {
         shader.setHandle(handle);
     }
 
-    private static boolean isCompiled(GL4 gl, int handle) {
+    private static boolean isCompiled(GL3 gl, int handle) {
         IntBuffer status = Buffers.newDirectIntBuffer(1);
-        gl.glGetShaderiv(handle, GL4.GL_COMPILE_STATUS, status);
-        return status.get() == GL4.GL_TRUE;
+        gl.glGetShaderiv(handle, GL3.GL_COMPILE_STATUS, status);
+        return status.get() == GL3.GL_TRUE;
     }
 
-    private static void printCompileErrorLog(GL4 gl, int handle, Shader shader) {
+    private static void printCompileErrorLog(GL3 gl, int handle, Shader shader) {
         IntBuffer logLengthBuffer = Buffers.newDirectIntBuffer(1);
-        gl.glGetShaderiv(handle, GL4.GL_INFO_LOG_LENGTH, logLengthBuffer);
+        gl.glGetShaderiv(handle, GL3.GL_INFO_LOG_LENGTH, logLengthBuffer);
         int length = logLengthBuffer.get();
 
         ByteBuffer data = Buffers.newDirectByteBuffer(length);

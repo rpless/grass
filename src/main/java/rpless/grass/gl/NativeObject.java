@@ -2,7 +2,7 @@ package rpless.grass.gl;
 
 import com.jogamp.common.nio.Buffers;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 
 public abstract class NativeObject {
 
@@ -12,8 +12,8 @@ public abstract class NativeObject {
      */
     public static int typeToSize(int type) {
         switch (type) {
-            case GL4.GL_FLOAT: return Buffers.SIZEOF_FLOAT;
-            case GL4.GL_UNSIGNED_SHORT: return Buffers.SIZEOF_SHORT;
+            case GL3.GL_FLOAT: return Buffers.SIZEOF_FLOAT;
+            case GL3.GL_UNSIGNED_SHORT: return Buffers.SIZEOF_SHORT;
             default: throw new IllegalArgumentException("The given type is not recognized.");
         }
     }

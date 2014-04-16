@@ -8,7 +8,7 @@ import rpless.grass.mesh.MeshFactory;
 import rpless.grass.mesh.MeshFormat;
 import rpless.grass.window.SimulationWindow;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
 import java.nio.file.Path;
@@ -45,11 +45,11 @@ public class Simulation implements GLEventListener {
 
     @Override
     public void init(GLAutoDrawable drawable) {
-        GL4 gl = drawable.getGL().getGL4();
+        GL3 gl = drawable.getGL().getGL3();
         gl.glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
         gl.glClearDepth(1.0f);
-        gl.glEnable(GL4.GL_DEPTH_TEST);
-        gl.glDepthFunc(GL4.GL_LEQUAL);
+        gl.glEnable(GL3.GL_DEPTH_TEST);
+        gl.glDepthFunc(GL3.GL_LEQUAL);
         gl.glLineWidth(3);
 
         groundShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(groundVertexPath), new FragmentShader(fragmentVertexPath));
@@ -57,7 +57,7 @@ public class Simulation implements GLEventListener {
         groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 
         ground = MeshFactory.createMesh(gl, Data.vertexData, Data.indexData,
-                new MeshFormat(groundShaderProgram.getAttributeLocation("position"), 4, GL4.GL_FLOAT, 0, false));
+                new MeshFormat(groundShaderProgram.getAttributeLocation("position"), 4, GL3.GL_FLOAT, 0, false));
         groundShaderProgram.disuseProgram(gl);
 
 
@@ -71,8 +71,8 @@ public class Simulation implements GLEventListener {
 
     @Override
     public void display(GLAutoDrawable drawable) {
-        GL4 gl = drawable.getGL().getGL4();
-        gl.glClear(GL4.GL_COLOR_BUFFER_BIT | GL4.GL_DEPTH_BUFFER_BIT);
+        GL3 gl = drawable.getGL().getGL3();
+        gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
         Matrix4f cameraTransform = camera.lookAt();
         Matrix4f modelTransform = Matrix4fUtil.translate(0, -0.25f, -1);
 
@@ -90,14 +90,14 @@ public class Simulation implements GLEventListener {
 
     @Override
     public void reshape(GLAutoDrawable drawable, int x, int y, int width, int height) {
-        GL4 gl = drawable.getGL().getGL4();
+        GL3 gl = drawable.getGL().getGL3();
         groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
         grassShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, ((float) width) / ((float) height), 0.1f, 100.0f));
     }
 
     @Override
     public void dispose(GLAutoDrawable drawable) {
-        GL4 gl = drawable.getGL().getGL4();
+        GL3 gl = drawable.getGL().getGL3();
         ground.delete(gl);
         groundShaderProgram.disuseProgram(gl);
         groundShaderProgram.delete(gl);

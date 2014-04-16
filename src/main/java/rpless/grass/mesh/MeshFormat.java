@@ -1,6 +1,6 @@
 package rpless.grass.mesh;
 
-import javax.media.opengl.GL4;
+import javax.media.opengl.GL3;
 
 public class MeshFormat {
     private int index, size, type, offset;
@@ -14,12 +14,12 @@ public class MeshFormat {
         this.normalized = normalized;
     }
 
-    public void enable(GL4 gl, int stride) {
+    public void enable(GL3 gl, int stride) {
         gl.glEnableVertexAttribArray(index);
         gl.glVertexAttribPointer(index, size, type, normalized, stride, offset);
     }
 
-    public void disable(GL4 gl) {
+    public void disable(GL3 gl) {
         gl.glDisableVertexAttribArray(index);
     }
 

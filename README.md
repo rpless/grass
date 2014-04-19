@@ -2,6 +2,14 @@
 
 The goal of this project is to write a proof of concept geometry shader that generates grass.
 
+## Controls
+- W: Move Forward
+- S: Move Backward
+- A: Strafe Left
+- D: Strafe Right
+- Escape: Close the simulation
+- Mouse: Moves the view around
+
 ## Strategy 
 The idea is to use barycentric coordinates and a Mersenne Twister to generate random points on each triangle.
 From these random points, we can generate geometry that is shaped like blades of grass.

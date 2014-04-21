@@ -2,7 +2,6 @@ package rpless.grass;
 
 import java.nio.FloatBuffer;
 import java.nio.ShortBuffer;
-import java.util.Arrays;
 
 public class Data {
     private static final TerrainBuilder builder = new TerrainBuilder(0.05f, 1, 1);

@@ -38,9 +38,9 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   float yAngle = sin(angle) * 0.0015f;
   vec4 A = center + vec4(xAngle, 0, yAngle, 0);
   vec4 B = center + vec4(-xAngle, 0, -yAngle, 0);
-  vec4 C = center + vec4(xAngle, 0.05f, yAngle, 0);
-  vec4 D = center + vec4(-xAngle, 0.05f, -yAngle, 0);
-  vec4 E = center + vec4(xAngle, 0.15f, yAngle, 0);
+  vec4 C = center + vec4(xAngle, 0.02f, yAngle, 0);
+  vec4 D = center + vec4(-xAngle, 0.02f, -yAngle, 0);
+  vec4 E = center + vec4(xAngle, 0.06f, yAngle, 0);
 
   // Emit coordinates
   Color = vec4(0, 0.55, 0.05, 0);

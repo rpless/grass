@@ -74,7 +74,7 @@ public class Simulation implements GLEventListener {
         GL3 gl = drawable.getGL().getGL3();
         gl.glClear(GL3.GL_COLOR_BUFFER_BIT | GL3.GL_DEPTH_BUFFER_BIT);
         Matrix4f cameraTransform = camera.lookAt();
-        Matrix4f modelTransform = Matrix4fUtil.translate(0, -0.25f, -1);
+        Matrix4f modelTransform = Matrix4fUtil.translate(0, -0.15f, -0.5f);
 
         groundShaderProgram.useProgram(gl);
         groundShaderProgram.uniform(gl, "cameraMatrix", cameraTransform);

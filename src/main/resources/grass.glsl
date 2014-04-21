@@ -17,6 +17,7 @@ float random();
 vec4 randomBarycentricCoordinate();
 void grassBlade(vec4 center, mat4 PCMMatrix);
 void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C);
+vec2 bladeOrientation();
 
 void main() {
   uint instanceFactor = uint(gl_PrimitiveID);
@@ -33,9 +34,9 @@ void main() {
 // center - The vector representing the point that center of the base of blade of grass should be placed
 // PCMMatrix - The matrix that is a precompution of the multiplication of the Projection, Camera, and Model Matrices
 void grassBlade(vec4 center, mat4 PCMMatrix) {
-  float angle = radians(random() * 360f);
-  float xAngle = cos(angle) * 0.0015f;
-  float yAngle = sin(angle) * 0.0015f;
+  vec2 orient = bladeOrientation();
+  float xAngle = orient.x * 0.0015f;
+  float yAngle = orient.y * 0.0015f;
   vec4 A = center + vec4(xAngle, 0, yAngle, 0);
   vec4 B = center + vec4(-xAngle, 0, -yAngle, 0);
   vec4 C = center + vec4(xAngle, 0.02f, yAngle, 0);
@@ -49,15 +50,20 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   createTriangle(PCMMatrix, C, D, E);
 }
 
+vec2 bladeOrientation() {
+  float angle = radians(random() * 360f);
+  return vec2(cos(angle), sin(angle));
+}
+
 // Create a vertex with the given matrix and three vertexes
 void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C) {
-    gl_Position = PCMMatrix * A;
-    EmitVertex();
-    gl_Position = PCMMatrix * B;
-    EmitVertex();
-    gl_Position = PCMMatrix * C;
-    EmitVertex();
-    EndPrimitive();
+  gl_Position = PCMMatrix * A;
+  EmitVertex();
+  gl_Position = PCMMatrix * B;
+  EmitVertex();
+  gl_Position = PCMMatrix * C;
+  EmitVertex();
+  EndPrimitive();
 }
 
 // Produce a psuedo random point that exists on the current primitive.

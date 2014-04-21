@@ -11,7 +11,7 @@ public class Vector3f {
     }
 
     // An epsilon for comparing floats.
-    private static float EPSILON = 0.000_001f;
+    private static float EPSILON = 0.000001f;
 
     private float x, y, z;
 

@@ -41,7 +41,7 @@ public class TerrainBuilder {
             short base = (short) (i * 4);
             buffer.put(new short[] {
                     base, (short) (base + 1), (short) (base + 2),
-                    (short) (base + 1), (short) (base + 2), (short) (base + 3)
+                    (short) (base + 1), (short) (base + 3), (short) (base + 2)
             });
         }
         return ((ShortBuffer) buffer.rewind());

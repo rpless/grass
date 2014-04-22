@@ -21,7 +21,7 @@ vec2 bladeOrientation();
 
 void main() {
   uint instanceFactor = uint(gl_PrimitiveID);
-  initMT(234340U, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
+  initMT(234340U ^ instanceFactor, 0xf50a1d49U, 0xffa8ffebU, 0x0bf2bfffU);
 
   // Precompute the perspective/camera/model matrix
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix;

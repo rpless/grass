@@ -125,6 +125,9 @@ void initMT(uint seed, uint m1, uint m2, uint tmat) {
   MT.status[1] = m1;
   MT.status[2] = m2;
   MT.status[3] = tmat;
+  MT.m1 = m1;
+  MT.m2 = m2;
+  MT.tmat = tmat;
 
   for (int i = 1; i < 8; i++) {
     MT.status[i & 3] ^= uint(i) + 1812433253U * MT.status[(i - 1) & 3] ^ (MT.status[(i - 1) & 3] >> 30);
@@ -136,16 +139,16 @@ void initMT(uint seed, uint m1, uint m2, uint tmat) {
 
 // Produce a psuedo-random float value on the range [0, 1]
 float random() {
-  uint x = MT.status[3];
-  uint y = (MT.status[0] & 0x7fffffffU) ^ MT.status[1] ^ MT.status[2];
+  uint x = (MT.status[0] & 0x7fffffffU) ^ MT.status[1] ^ MT.status[2];
+  uint y = MT.status[3];
   x ^= (x << 1);
-  y ^= (y << 1) ^ x;
+  y ^= (y >> 1) ^ x;
   MT.status[0] = MT.status[1];
   MT.status[1] = MT.status[2];
   MT.status[2] = x ^ (y << 10);
   MT.status[3] = y;
-  MT.status[1] ^= - (y & 1U) & MT.m1;
-  MT.status[2] ^= - (y & 1U) & MT.m2;
+  MT.status[1] ^= -(y & 1U) & MT.m1;
+  MT.status[2] ^= -(y & 1U) & MT.m2;
 
   uint t0, t1;
   t0 = MT.status[3];

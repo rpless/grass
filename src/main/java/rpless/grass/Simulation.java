@@ -11,8 +11,10 @@ import rpless.grass.window.SimulationWindow;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import java.nio.file.Path;
-import java.nio.file.Paths;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 /**
  * The {@code Simulation} is a {@link javax.media.opengl.GLEventListener} that implements the main
@@ -20,15 +22,33 @@ import java.nio.file.Paths;
  */
 public class Simulation implements GLEventListener {
 
+    private static String readFile(String filename) {
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(filename));
+            StringBuilder builder = new StringBuilder();
+            String line = reader.readLine();
+            while (line != null) {
+                builder.append(line).append(System.lineSeparator());
+                line = reader.readLine();
+            }
+            return builder.toString();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        throw new RuntimeException("Failed to find file: " + filename);
+    }
+
     // Ground Shader
-    private final Path groundVertexPath = Paths.get("src", "main", "resources", "ground-vertex.glsl");
-    private final Path fragmentVertexPath = Paths.get("src", "main", "resources", "fragment.glsl");
+    private final String groundVertexPath = readFile("src//main//resources//ground-vertex.glsl");
+    private final String fragmentVertexPath = readFile("src//main//resources//fragment.glsl");
     private ShaderProgram groundShaderProgram;
 
     // Grass Shader
-    private final Path grassVertexPath = Paths.get("src", "main", "resources", "pass-through-vertex.glsl");
-    private final Path grassGeometryPath = Paths.get("src", "main", "resources", "grass.glsl");
-    private final Path grassFragmentPath = fragmentVertexPath;
+    private final String grassVertexPath = readFile("src//main//resources//pass-through-vertex.glsl");
+    private final String grassGeometryPath = readFile("src//main//resources//grass.glsl");
+    private final String grassFragmentPath = fragmentVertexPath;
     private ShaderProgram grassShaderProgram;
 
     private Camera camera = new Camera();

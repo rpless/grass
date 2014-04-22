@@ -1,6 +1,6 @@
 #version 330
 
-layout(triangles, invocations = 1) in;
+layout(triangles) in;
 
 uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
@@ -41,7 +41,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 B = center + vec4(-xAngle, 0, -yAngle, 0);
   vec4 C = center + vec4(xAngle, 0.02f, yAngle, 0);
   vec4 D = center + vec4(-xAngle, 0.02f, -yAngle, 0);
-  vec4 E = center + vec4(xAngle, 0.06f, yAngle, 0);
+  vec4 E = center + vec4(0, 0.06f, 0, 0);
 
   // Emit coordinates
   Color = vec4(0, 0.55, 0.05, 0);
@@ -51,7 +51,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
 }
 
 vec2 bladeOrientation() {
-  float angle = radians(random() * 360f);
+  float angle = radians(random() * 360);
   return vec2(cos(angle), sin(angle));
 }
 
@@ -66,7 +66,7 @@ void createTriangle(mat4 PCMMatrix, vec4 A, vec4 B, vec4 C) {
   EndPrimitive();
 }
 
-// Produce a psuedo random point that exists on the current primitive.
+// Produce a psuedo random point that exists on the current triangle primitive.
 vec4 randomBarycentricCoordinate() {
   float R = random();
   float S = random();

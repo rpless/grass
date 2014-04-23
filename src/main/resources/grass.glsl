@@ -6,7 +6,7 @@ uniform mat4 modelMatrix;
 uniform mat4 cameraMatrix;
 uniform mat4 perspectiveMatrix;
 
-layout(triangle_strip, max_vertices=270) out; // (9 * 30)
+layout(triangle_strip, max_vertices=180) out;
 
 out vec4 Color;
 
@@ -25,7 +25,7 @@ void main() {
 
   // Precompute the perspective/camera/model matrix
   mat4 PCMMatrix = (perspectiveMatrix * cameraMatrix) * modelMatrix;
-  for (int i = 0; i < 30; i++) {
+  for (int i = 0; i < 20; i++) {
     grassBlade(randomBarycentricCoordinate(), PCMMatrix);
   }
 }
@@ -42,7 +42,7 @@ void grassBlade(vec4 center, mat4 PCMMatrix) {
   vec4 B = center + vec4(-xAngle, 0, -yAngle, 0);
   vec4 C = center + vec4(xAngle, heightVariance, yAngle, 0);
   vec4 D = center + vec4(-xAngle, heightVariance, -yAngle, 0);
-  vec4 E = center + vec4(0, heightVariance * 2, 0, 0);
+  vec4 E = center + vec4(0, heightVariance * 4, 0, 0);
 
   // Emit coordinates
   Color = vec4(0, 0.55, 0.05, 0);

@@ -28,7 +28,7 @@ public class Simulation implements GLEventListener {
             StringBuilder builder = new StringBuilder();
             String line = reader.readLine();
             while (line != null) {
-                builder.append(line).append(System.lineSeparator());
+                builder.append(line).append("\n");
                 line = reader.readLine();
             }
             return builder.toString();

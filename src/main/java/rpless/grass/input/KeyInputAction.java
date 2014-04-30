@@ -17,11 +17,6 @@ public class KeyInputAction {
     }
 
     public boolean isDetected(KeyEvent keyEvent) {
-        for (Recognizer<KeyEvent> recognizer : recognizers) {
-            if (!recognizer.isRecognized(keyEvent)) {
-                return false;
-            }
-        }
-        return true;
+        return recognizers.stream().allMatch(recognizer -> recognizer.isRecognized(keyEvent));
     }
 }

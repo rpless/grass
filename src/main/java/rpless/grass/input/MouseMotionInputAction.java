@@ -18,14 +18,12 @@ public class MouseMotionInputAction {
     }
 
     public boolean isDetected(MouseEvent event) {
-        for (Recognizer<MouseEvent> recognizer : recognizers) {
-            if (!recognizer.isRecognized(event)) {
-                return false;
-            }
+        boolean isMatched = recognizers.stream().allMatch(recognizer -> recognizer.isRecognized(event));
+        if (isMatched) {
+            x = event.getX();
+            y = event.getY();
         }
-        x = event.getX();
-        y = event.getY();
-        return true;
+        return isMatched;
     }
 
     public int getX() {

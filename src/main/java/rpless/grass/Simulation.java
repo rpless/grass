@@ -11,10 +11,7 @@ import rpless.grass.window.SimulationWindow;
 import javax.media.opengl.GL3;
 import javax.media.opengl.GLAutoDrawable;
 import javax.media.opengl.GLEventListener;
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
+import java.nio.file.Paths;
 
 /**
  * The {@code Simulation} is a {@link javax.media.opengl.GLEventListener} that implements the main
@@ -22,33 +19,16 @@ import java.io.IOException;
  */
 public class Simulation implements GLEventListener {
 
-    private static String readFile(String filename) {
-        try {
-            BufferedReader reader = new BufferedReader(new FileReader(filename));
-            StringBuilder builder = new StringBuilder();
-            String line = reader.readLine();
-            while (line != null) {
-                builder.append(line).append("\n");
-                line = reader.readLine();
-            }
-            return builder.toString();
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        throw new RuntimeException("Failed to find file: " + filename);
-    }
-
     // Ground Shader
-    private final String groundVertexPath = readFile("src//main//resources//ground-vertex.glsl");
-    private final String fragmentVertexPath = readFile("src//main//resources//fragment.glsl");
+    private final Shader groundVertexShader = new VertexShader(Paths.get("src", "main", "resources", "ground-vertex.glsl"));
+    private final Shader groundFragmentShader = new FragmentShader(Paths.get("src", "main", "resources", "fragment.glsl"));
     private ShaderProgram groundShaderProgram;
 
     // Grass Shader
-    private final String grassVertexPath = readFile("src//main//resources//pass-through-vertex.glsl");
-    private final String grassGeometryPath = readFile("src//main//resources//grass.glsl");
-    private final String grassFragmentPath = fragmentVertexPath;
+
+    private final Shader grassVertexShader = new VertexShader(Paths.get("src", "main", "resources", "pass-through-vertex.glsl"));
+    private final Shader grassGeometryShader= new GeometryShader(Paths.get("src", "main", "resources", "grass.glsl"));
+    private final Shader grassFragmentShader = groundFragmentShader;
     private ShaderProgram grassShaderProgram;
 
     private Camera camera = new Camera();
@@ -75,7 +55,7 @@ public class Simulation implements GLEventListener {
         gl.glCullFace(GL3.GL_BACK);
         gl.glFrontFace(GL3.GL_CW);
 
-        groundShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(groundVertexPath), new FragmentShader(fragmentVertexPath));
+        groundShaderProgram = ShaderProgramFactory.makeShader(gl, groundVertexShader, groundFragmentShader);
         groundShaderProgram.useProgram(gl);
         groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
 
@@ -84,9 +64,7 @@ public class Simulation implements GLEventListener {
         groundShaderProgram.disuseProgram(gl);
 
 
-        grassShaderProgram = ShaderProgramFactory.makeShader(gl, new VertexShader(grassVertexPath),
-                                                                 new GeometryShader(grassGeometryPath),
-                                                                 new FragmentShader(grassFragmentPath));
+        grassShaderProgram = ShaderProgramFactory.makeShader(gl, grassVertexShader, grassGeometryShader, grassFragmentShader);
         grassShaderProgram.useProgram(gl);
         groundShaderProgram.uniform(gl, "perspectiveMatrix", Matrix4fUtil.perspective(45, SimulationWindow.WIDTH / SimulationWindow.HEIGHT, 0.1f, 100.0f));
         grassShaderProgram.disuseProgram(gl);

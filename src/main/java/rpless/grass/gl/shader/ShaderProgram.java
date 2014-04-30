@@ -2,7 +2,6 @@ package rpless.grass.gl.shader;
 
 import rpless.grass.gl.NativeObject;
 import rpless.grass.math.Matrix4f;
-import rpless.grass.math.Matrix4fUtil;
 
 import javax.media.opengl.GL3;
 import java.util.Map;

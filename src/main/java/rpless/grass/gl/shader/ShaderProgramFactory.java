@@ -15,24 +15,24 @@ public class ShaderProgramFactory {
     public static ShaderProgram makeShader(GL3 gl, Shader... shaders) {
         List<Shader> shaderList = Arrays.asList(shaders);
         int handle = gl.glCreateProgram();
-        for (Shader shader : shaderList) {
+        shaderList.forEach(shader -> {
             compileShader(gl, shader);
             gl.glAttachShader(handle, shader.getHandle());
-        }
+        });
 
         gl.glLinkProgram(handle);
         if (!isLinked(gl, handle)) {
             printLinkerError(gl, handle);
         }
-        for (Shader shader : shaderList) {
+        shaderList.forEach(shader -> {
             gl.glDetachShader(handle, shader.getHandle());
             gl.glDeleteShader(shader.getHandle());
-        }
+        });
         return new ShaderProgram(handle, getAttributeMap(gl, handle), getUniforms(gl, handle));
     }
 
     private static Map<String, Integer> getAttributeMap(GL3 gl, int handle) {
-        Map<String, Integer> attributes = new HashMap<String, Integer>();
+        Map<String, Integer> attributes = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
         gl.glGetProgramiv(handle, GL3.GL_ACTIVE_ATTRIBUTES, countBuffer);
         int limit = countBuffer.get();
@@ -49,7 +49,7 @@ public class ShaderProgramFactory {
     }
 
     private static Map<String, Integer> getUniforms(GL3 gl, int handle) {
-        Map<String, Integer> uniforms = new HashMap<String, Integer>();
+        Map<String, Integer> uniforms = new HashMap<>();
         IntBuffer countBuffer = IntBuffer.allocate(1);
         gl.glGetProgramiv(handle, GL3.GL_ACTIVE_UNIFORMS, countBuffer);
         int limit = countBuffer.get();

@@ -17,3 +17,6 @@ From these random points, we can generate geometry that is shaped like blades of
 To generate randomness I ported Mutsuo Saito's and Makoto Matsumoto's TinyMT mersenne twistter to GLSL.
 I'm not quite sure if I nailed all of the casting that goes on in TinyMT, because GLSL isn't as forgiving with its Type System.
 The original implementation can be found [here](http://www.math.sci.hiroshima-u.ac.jp/~%20m-mat/MT/TINYMT/index.html).
+
+## Dependencies
+Java 8

@@ -18,5 +18,6 @@ To generate randomness I ported Mutsuo Saito's and Makoto Matsumoto's TinyMT mer
 I'm not quite sure if I nailed all of the casting that goes on in TinyMT, because GLSL isn't as forgiving with its Type System.
 The original implementation can be found [here](http://www.math.sci.hiroshima-u.ac.jp/~%20m-mat/MT/TINYMT/index.html).
 
-## Dependencies
-Java 8
+## Software Dependencies
+- Java 8
+- Maven 3 (if building from source)
